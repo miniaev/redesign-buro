@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReDesign — эргономика пространства. Погружение</title>
+<meta name="description" content="Студия пространственной эргономики ReDesign, Москва. Сайт-погружение: движение сквозь дом по сценариям жизни.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1A1A2E; --deep:#16213E; --blue:#0F3460;
+  --white:#F8F7F4; --text:#9a9cb0; --gold:#C9A84C;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:auto}
+body{
+  font-family:'Manrope',sans-serif;font-size:15px;line-height:1.6;
+  color:var(--text);background:#111120;
+  overflow-x:hidden;
+}
+h1,h2,h3{font-family:'Cormorant Garamond',serif;color:var(--white);font-weight:600;line-height:1.12}
+.mono{font-family:'JetBrains Mono',monospace}
+
+/* ============ высота прокрутки задаётся спейсером ============ */
+#hold{display:none}
+
+/* ============ фиксированная сцена-вьюпорт ============ */
+.rseg{position:relative}
+.rstage{position:sticky;top:0;height:100vh;overflow:hidden;background:radial-gradient(ellipse at 50% 45%, #1d1d33 0%, #111120 65%, #0b0b16 100%);perspective:1400px;perspective-origin:50% 50%}
+.fseg{position:relative}
+.scene.flow{position:relative;left:auto;top:auto;transform:none !important;opacity:1 !important;filter:none !important;visibility:visible !important;max-height:none;overflow:visible;width:100%;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:80px max(calc((100% - 1040px)/2),5vw);pointer-events:auto}
+.room{position:absolute;inset:0;will-change:transform,opacity;opacity:0;visibility:hidden;transform-origin:50% 50%}
+.room svg{width:100%;height:100%;display:block;filter:blur(1.8px)}
+@media(max-width:767px){.room svg{filter:blur(0.7px)}}
+
+/* ============ сцены ============ */
+.scene{
+  position:absolute;left:50%;top:50%;
+  width:min(1040px, 92vw);
+  max-height:82vh;
+  transform:translate(-50%,-50%);
+  will-change:transform,opacity,filter;
+  opacity:0;visibility:hidden;
+  overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;scrollbar-color:rgba(201,168,76,.4) transparent;
+  padding:10px 4px;
+}
+.scene::-webkit-scrollbar{width:4px}
+.scene::-webkit-scrollbar-thumb{background:rgba(201,168,76,.4)}
+.tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:block}
+.h2{font-size:clamp(28px,5vw,46px);margin-bottom:16px}
+.lead{max-width:640px;font-size:clamp(14px,1.6vw,17px)}
+.gold{color:var(--gold)}
+em.g{font-style:italic;color:var(--gold)}
+
+.btn{display:inline-block;padding:14px 26px;font-weight:600;font-size:14px;text-decoration:none;border-radius:2px;transition:.2s;cursor:pointer;border:none;font-family:'Manrope',sans-serif}
+.btn-primary{background:var(--gold);color:var(--navy)}
+.btn-primary:hover{background:#e0c06a}
+.btn-ghost{background:transparent;color:var(--white);border:1px solid rgba(248,247,244,.35)}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+
+/* карточки */
+.cards{display:grid;gap:14px;margin-top:26px}
+@media(min-width:760px){.cards{grid-template-columns:repeat(3,1fr)}}
+.card{background:rgba(22,33,62,.65);border:1px solid rgba(201,168,76,.22);backdrop-filter:blur(4px);padding:20px;border-radius:3px}
+.card h3{font-size:19px;margin-bottom:8px}
+.card .num{font-family:'JetBrains Mono',monospace;color:var(--gold);font-size:12px;display:block;margin-bottom:8px}
+.card p{font-size:13.5px}
+.card .q{display:block;margin-top:10px;font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold);font-size:16px}
+
+/* услуги */
+.srv{display:flex;justify-content:space-between;gap:14px;align-items:baseline;padding:13px 0;border-bottom:1px solid rgba(248,247,244,.1);flex-wrap:wrap}
+.srv h3{font-size:17px}
+.srv p{font-size:12.5px;max-width:520px}
+.srv .price{font-family:'JetBrains Mono',monospace;color:var(--gold);font-size:13px;white-space:nowrap}
+
+/* этапы */
+.steps{display:grid;gap:0;margin-top:20px}
+@media(min-width:760px){.steps{grid-template-columns:1fr 1fr;gap:0 40px}}
+.step{display:grid;grid-template-columns:44px 1fr;gap:12px;padding:13px 0;border-bottom:1px solid rgba(248,247,244,.1)}
+.step .n{font-family:'JetBrains Mono',monospace;color:var(--gold);font-size:17px}
+.step h3{font-size:16px}
+.step p{font-size:12.5px}
+.step .dur{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold)}
+
+/* кейсы */
+.case-grid{display:grid;gap:12px;margin-top:20px}
+@media(min-width:760px){.case-grid{grid-template-columns:1fr 1fr}}
+.cb{background:rgba(22,33,62,.55);border:1px solid rgba(201,168,76,.18);padding:16px;border-radius:3px}
+.cb h4{font-family:'Manrope',sans-serif;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.cb p{font-size:13px}
+.cq{grid-column:1/-1;border-left:3px solid var(--gold);padding:6px 0 6px 16px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:var(--white)}
+.cq .who{display:block;font-family:'JetBrains Mono',monospace;font-style:normal;font-size:11px;color:var(--text);margin-top:6px}
+.cmeta{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text)}
+
+/* отзывы */
+.tst{display:grid;gap:12px;margin-top:22px}
+@media(min-width:760px){.tst{grid-template-columns:1fr 1fr}}
+.tsti{background:rgba(22,33,62,.55);border:1px solid rgba(201,168,76,.18);padding:18px;border-radius:3px}
+.tsti p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;color:var(--white);margin-bottom:8px}
+.tsti .who{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold)}
+/* комнаты-высказывания и компактные ряды */
+.st-big{font-size:clamp(36px,9vw,64px);margin-bottom:18px}
+.lay{padding:12px 0;border-bottom:1px solid rgba(248,247,244,.1)}
+.lay h3{font-size:18px;display:inline}
+.lay .q{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold);font-size:16px;margin-top:4px}
+.iqline{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--white);font-size:clamp(19px,4.6vw,26px);padding:12px 0;border-bottom:1px solid rgba(248,247,244,.08)}
+.iqline span{color:var(--gold);font-family:'JetBrains Mono',monospace;font-style:normal;font-size:12px;margin-right:12px}
+
+/* форма */
+.form-wrap{background:rgba(22,33,62,.7);border:1px solid rgba(201,168,76,.25);backdrop-filter:blur(6px);border-radius:3px;padding:22px;margin-top:20px;max-width:620px}
+.form-steps{display:flex;gap:6px;margin-bottom:18px}
+.fs-dot{flex:1;height:3px;background:rgba(248,247,244,.15);border-radius:2px}
+.fs-dot.on{background:var(--gold)}
+.fstep{display:none}
+.fstep.on{display:block}
+.fstep h3{font-size:19px;margin-bottom:2px}
+.hint{font-size:12px;color:var(--text);margin-bottom:14px}
+.f-label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--white);display:block;margin-bottom:5px}
+.opt-group{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 16px}
+.opt{padding:8px 13px;border:1px solid rgba(248,247,244,.25);border-radius:2px;font-size:13px;cursor:pointer;user-select:none;transition:.15s;color:var(--text)}
+.opt:hover{border-color:var(--gold);color:var(--white)}
+.opt.sel{background:var(--gold);border-color:var(--gold);color:var(--navy);font-weight:600}
+.finput{width:100%;padding:11px 13px;border:1px solid rgba(248,247,244,.25);border-radius:2px;font-family:'Manrope',sans-serif;font-size:14px;margin-bottom:14px;background:rgba(17,17,32,.6);color:var(--white)}
+.finput:focus{outline:none;border-color:var(--gold)}
+.fnav{display:flex;gap:10px;justify-content:space-between;margin-top:6px}
+.form-done{text-align:center;padding:26px 8px;display:none}
+.form-done h3{font-size:21px;margin-bottom:8px}
+
+/* ============ HUD ============ */
+#hud-top{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;justify-content:space-between;align-items:center;padding:14px 20px;pointer-events:none}
+#hud-top a{pointer-events:auto}
+.logo{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:700;color:var(--white);text-decoration:none}
+.logo span{color:var(--gold)}
+#hud-phone{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--white);text-decoration:none}
+#hud-phone:hover{color:var(--gold)}
+#progress{position:fixed;top:0;left:0;height:2px;background:var(--gold);width:0;z-index:600}
+#hud-scene{position:fixed;left:20px;bottom:18px;z-index:500;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;color:var(--gold);text-transform:uppercase}
+#dots{position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:500;display:flex;flex-direction:column;gap:10px}
+#dots button{width:8px;height:8px;border-radius:50%;border:1px solid rgba(201,168,76,.5);background:transparent;cursor:pointer;padding:0;transition:.2s}
+#dots button.on{background:var(--gold);transform:scale(1.35)}
+@media(max-width:600px){#dots{right:8px}}
+
+@media (prefers-reduced-motion: reduce){
+  .scene{transition:none !important}
+}
+
+/* чередование секций в «плоских» отрезках — палитра из ТЗ */
+.scene.flow.dark{background:var(--navy)}
+.scene.flow.light{background:var(--white);color:#555}
+.scene.flow.light h1,.scene.flow.light h2,.scene.flow.light h3{color:var(--navy)}
+.scene.flow.light .iqline{color:var(--navy);border-color:#e8e6df}
+.scene.flow.light .iqline span{color:var(--gold)}
+.scene.flow.light .srv,.scene.flow.light .step,.scene.flow.light .lay{border-color:#e8e6df}
+.scene.flow.light .cb{background:#fff;border:1px solid #e8e6df}
+.scene.flow.light .cq{color:var(--navy)}
+.scene.flow.light .cq .who{color:#999}
+.scene.flow.light .cmeta{color:#999}
+.scene.flow.light .tsti{background:#fff;border:1px solid #e8e6df}
+.scene.flow.light .tsti p{color:var(--navy)}
+.scene.flow.light .form-wrap{background:#fff;border:1px solid #e8e6df;backdrop-filter:none}
+.scene.flow.light .f-label{color:var(--navy)}
+.scene.flow.light .fs-dot{background:#e8e6df}
+.scene.flow.light .fs-dot.on{background:var(--gold)}
+.scene.flow.light .hint{color:#999}
+.scene.flow.light .opt{border-color:#d8d5cc;color:#555;background:#fff}
+.scene.flow.light .opt:hover{border-color:var(--gold);color:var(--navy)}
+.scene.flow.light .opt.sel{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:600}
+.scene.flow.light .finput{background:#fff;border-color:#d8d5cc;color:var(--navy)}
+.scene.flow.light .btn-primary{background:var(--blue);color:#fff}
+.scene.flow.light .btn-primary:hover{background:var(--gold);color:var(--navy)}
+.scene.flow.light .btn-ghost{color:var(--navy);border-color:#d8d5cc}
+.sig{color:var(--white)}
+.scene.flow.light .sig{color:var(--navy)}
+</style>
+</head>
+<body>
+
+<div id="hold">
+
+  <!-- 0 HERO -->
+  <section class="scene" data-name="Вход">
+    <span class="tag">Студия пространственной эргономики · Москва</span>
+    <h1 class="h2" style="font-size:clamp(34px,7vw,64px)">Мы проектируем вашу <em class="g">жизнь</em> в&nbsp;пространстве</h1>
+    <p class="lead">ReDesign — студия пространственной эргономики. Реконструкция коттеджей и планировочные решения под ваши жизненные сценарии.</p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:22px">
+      <button class="btn btn-primary" onclick="goLast()">Обсудить проект</button>
+      <button class="btn btn-ghost" onclick="goCases()">Смотреть кейсы</button>
+    </div>
+  </section>
+
+  <!-- 1 ПОДХОД -->
+  <section class="scene" data-name="Подход">
+    <span class="tag">01 · Подход</span>
+    <h2 class="h2">Эргономика пространства — это не про красоту</h2>
+    <p class="lead">Эргономика — наука о том, как среда поддерживает или мешает человеку. В интерьере это дом, где всё «под рукой» — потому что он спроектирован под вас.</p>
+    <p style="margin-top:20px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--gold)">дальше — поворот направо, к принципам →</p>
+  </section>
+
+  <!-- 2 ПРИНЦИП 1 -->
+  <section class="scene" data-name="Принцип 1/3">
+    <span class="tag">принцип 01 / 03</span>
+    <h2 class="st-big">Функционал прежде формы</h2>
+    <p class="lead">Красивое, но неудобное — плохое проектирование. Сначала — что здесь будет происходить. Потом — как это выглядит.</p>
+  </section>
+
+  <!-- 3 ПРИНЦИП 2 -->
+  <section class="scene" data-name="Принцип 2/3">
+    <span class="tag">принцип 02 / 03</span>
+    <h2 class="st-big">Сценарий важнее метража</h2>
+    <p class="lead">Маленький дом может работать превосходно. Большой — быть неудобным. Всё решает соответствие сценариям семьи.</p>
+  </section>
+
+  <!-- 4 ПРИНЦИП 3 -->
+  <section class="scene" data-name="Принцип 3/3">
+    <span class="tag">принцип 03 / 03</span>
+    <h2 class="st-big">Пространство существует во времени</h2>
+    <p class="lead">Дом живёт по-разному утром, днём и вечером. Хорошая планировка учитывает суточные ритмы.</p>
+    <p style="margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--gold)">← дальше — поворот налево, в методологию</p>
+  </section>
+
+  <!-- 5 МЕТОДОЛОГИЯ -->
+  <section class="scene" data-name="Методология">
+    <span class="tag">02 · Методология</span>
+    <h2 class="h2">Сценарии до стен</h2>
+    <p class="lead">Сначала — глубокое интервью. Не «что вы хотите увидеть», а «как вы хотите жить».</p>
+    <div style="margin-top:14px">
+      <div class="lay"><h3>Сценарии жизни</h3><span class="q">«Прежде чем рисовать стены, мы описываем вашу жизнь»</span></div>
+      <div class="lay"><h3>Функционал жизни</h3><span class="q">«Каждый метр должен знать, зачем он существует»</span></div>
+      <div class="lay"><h3>Эргономика пространства</h3><span class="q">«Дом, который работает — без усилий»</span></div>
+    </div>
+  </section>
+
+  <!-- 6 ВОПРОСЫ ИНТЕРВЬЮ -->
+  <section class="scene" data-name="Из интервью">
+    <span class="tag">02 · Из реального интервью</span>
+    <div class="iqline"><span>01</span>Кто первым встаёт утром — и куда идёт?</div>
+    <div class="iqline"><span>02</span>Как часто вы работаете из дома?</div>
+    <div class="iqline"><span>03</span>Сколько бывает гостей — и как часто?</div>
+    <div class="iqline"><span>04</span>Каким вы видите идеальный вечер через 5 лет?</div>
+    <p style="margin-top:16px;font-size:13px;color:var(--text)">Из ответов рождается карта жизни — и только потом планировка.</p>
+  </section>
+
+  <!-- 7 УСЛУГИ I -->
+  <section class="scene" data-name="Услуги 1/2">
+    <span class="tag">03 · Услуги и стоимость — 1/2</span>
+    <h2 class="h2">Что мы делаем</h2>
+    <div style="margin-top:8px">
+      <div class="srv"><div><h3>Сценарный анализ и планировка</h3><p>Интервью, карта жизни, 2–3 варианта планировки.</p></div><div class="price">от 1 200 ₽/м²</div></div>
+      <div class="srv"><div><h3>Реконструкция коттеджа</h3><p>Пересмотр пространства под новые сценарии жизни.</p></div><div class="price">от 1 500 ₽/м²</div></div>
+      <div class="srv"><div><h3>Полный дизайн-проект</h3><p>Планировка + развёртки + освещение + спецификации.</p></div><div class="price">от 1 500 ₽/м²</div></div>
+    </div>
+  </section>
+
+  <!-- 8 УСЛУГИ II -->
+  <section class="scene" data-name="Услуги 2/2">
+    <span class="tag">03 · Услуги и стоимость — 2/2</span>
+    <h2 class="h2">И сопровождение</h2>
+    <div style="margin-top:8px">
+      <div class="srv"><div><h3>3D-визуализация сценариев</h3><p>«Как выглядит в момент использования»: утро, вечер, гости.</p></div><div class="price">от 120 000 ₽</div></div>
+      <div class="srv"><div><h3>Авторский надзор</h3><p>Контроль соответствия сценариям на каждом этапе стройки.</p></div><div class="price">от 100 000 ₽/мес.</div></div>
+      <div class="srv"><div><h3>Консультация по эргономике</h3><p>Аудит: что работает, что мешает, как исправить.</p></div><div class="price">2 500 ₽/час</div></div>
+    </div>
+  </section>
+
+  <!-- 9 ЭТАПЫ -->
+  <section class="scene" data-name="Этапы">
+    <span class="tag">04 · Этапы работы</span>
+    <h2 class="h2">От сценария до проекта</h2>
+    <div class="steps">
+      <div class="step"><div class="n">01</div><div><h3>Интервью и сценарный анализ</h3><span class="dur">1–2 недели</span></div></div>
+      <div class="step"><div class="n">02</div><div><h3>Концепции планировок</h3><span class="dur">3 недели</span></div></div>
+      <div class="step"><div class="n">03</div><div><h3>Детальная проработка</h3><span class="dur">4–6 недель</span></div></div>
+      <div class="step"><div class="n">04</div><div><h3>Утверждение — фальш-стены на объекте</h3><span class="dur">по итогу этапа 3</span></div></div>
+      <div class="step"><div class="n">05</div><div><h3>Рабочая документация</h3><span class="dur">4–6 недель</span></div></div>
+      <div class="step"><div class="n">06</div><div><h3>Авторский надзор</h3><span class="dur">по договору</span></div></div>
+    </div>
+  </section>
+
+  <!-- 5 КЕЙС 1 -->
+  <section class="scene" data-name="Кейс 1/3">
+    <span class="tag">05 · Истории трансформации — 1/3</span>
+    <h2 class="h2">Дом, где кухня была тупиком</h2>
+    <p class="cmeta">реконструкция коттеджа · 240 м² · семья с детьми 4 и 8 лет</p>
+    <div class="case-grid">
+      <div class="cb"><h4>Жизнь до</h4><p>Кухня в дальнем углу: мама готовит и не видит детей. Инсайт интервью — семье нужен визуальный контроль из кухни.</p></div>
+      <div class="cb"><h4>Что изменили</h4><p>Кухню развернули к гостиной, игровая — в поле зрения. Маршрут «плита — стол — игровая»: было 14 м, стало 4.</p></div>
+      <div class="cq">«Я впервые готовлю ужин и не кричу "что у вас там происходит?!"<span class="who">— заказчица, Николина Гора</span></div>
+    </div>
+  </section>
+
+  <!-- 6 КЕЙС 2 -->
+  <section class="scene" data-name="Кейс 2/3">
+    <span class="tag">05 · Истории трансформации — 2/3</span>
+    <h2 class="h2">Кабинет с отдельным входом</h2>
+    <p class="cmeta">планировочное решение · 180 м² · пара, оба на удалёнке</p>
+    <div class="case-grid">
+      <div class="cb"><h4>Жизнь до</h4><p>Оба на удалёнке за одним столом, клиенты психолога идут через гостиную. Инсайт — «клиентский» и «семейный» маршруты не должны пересекаться.</p></div>
+      <div class="cb"><h4>Что изменили</h4><p>Кабинет с мини-приёмной и отдельным входом с террасы, звукоизоляция. Два независимых рабочих сценария — без пристройки.</p></div>
+      <div class="cq">«Клиенты больше не видят нашу сушилку с бельём. А я не слышу чужие созвоны.»<span class="who">— заказчики, Истра</span></div>
+    </div>
+  </section>
+
+  <!-- 7 КЕЙС 3 -->
+  <section class="scene" data-name="Кейс 3/3">
+    <span class="tag">05 · Истории трансформации — 3/3</span>
+    <h2 class="h2">Большой дом, в котором негде уединиться</h2>
+    <p class="cmeta">реконструкция коттеджа · 420 м² · три поколения</p>
+    <div class="case-grid">
+      <div class="cb"><h4>Жизнь до</h4><p>420 метров — и ни одного тихого угла. Инсайт — не хватает градиента приватности, а не общих зон.</p></div>
+      <div class="cb"><h4>Что изменили</h4><p>«Громкое» и «тихое» крылья, читальный угол с зимним садом, буферные зоны между поколениями.</p></div>
+      <div class="cq">«Мы стали больше времени проводить вместе — потому что теперь можем побыть порознь.»<span class="who">— заказчик, Новая Рига</span></div>
+    </div>
+  </section>
+
+  <!-- 13 ОТЗЫВЫ I -->
+  <section class="scene" data-name="Отзывы 1/2">
+    <span class="tag">06 · Отзывы — 1/2</span>
+    <h2 class="h2">Голоса из результата</h2>
+    <div class="tst">
+      <div class="tsti"><p>«Теперь я могу спокойно работать из дома — кабинет действительно изолирован, а не "просто комната с дверью".»</p><span class="who">Марина · 140 м²</span></div>
+      <div class="tsti"><p>«Утром мы больше не сталкиваемся в одном санузле впятером. Решение стоило дешевле, чем год раздражения.»</p><span class="who">Сергей · 260 м²</span></div>
+    </div>
+  </section>
+
+  <!-- 14 ОТЗЫВЫ II -->
+  <section class="scene" data-name="Отзывы 2/2">
+    <span class="tag">06 · Отзывы — 2/2</span>
+    <div class="tst" style="margin-top:6px">
+      <div class="tsti"><p>«Нас спросили, кто первым встаёт. Ни один дизайнер раньше этим не интересовался.»</p><span class="who">Анна и Дмитрий</span></div>
+      <div class="tsti"><p>«Фальш-стены на этапе утверждения — гениально. Мы "прошли" будущий дом до стройки и поменяли два решения.»</p><span class="who">Игорь · 380 м²</span></div>
+    </div>
+  </section>
+
+  <!-- 15 О СТУДИИ -->
+  <section class="scene" data-name="О студии">
+    <span class="tag">07 · О студии</span>
+    <h2 class="h2">Команда и подход</h2>
+    <p class="lead">ReDesign — московская студия. Мы работаем не с декором, а со сценариями жизни. Методология — классическая эргономика (Panero &amp; Zelnik, Neufert), нейроархитектура (ANFA), сценарный подход мировых бюро.</p>
+    <p class="sig" style="margin-top:18px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(20px,4.6vw,28px)">«Мы не проектируем стены.<br>Мы проектируем вашу <span class="gold">жизнь</span> в этих стенах.»</p>
+  </section>
+
+  <!-- ===== ДЕСКТОПНАЯ АНФИЛАДА (полные комнаты, 11 сцен) ===== -->
+  <section class="scene d" data-name="Подход">
+    <span class="tag">01 · Подход</span>
+    <h2 class="h2">Эргономика пространства — это не про красоту</h2>
+    <p class="lead">Эргономика — наука о том, как среда поддерживает или мешает человеку. В автомобиле это руль на правильной высоте. В интерьере — дом, где всё «под рукой» не потому, что вы привыкли, а потому что он спроектирован под вас.</p>
+    <div class="cards">
+      <div class="card"><span class="num">01</span><h3>Функционал прежде формы</h3><p>Красивое, но неудобное — это плохое проектирование. Сначала — что здесь будет происходить, потом — как это выглядит.</p></div>
+      <div class="card"><span class="num">02</span><h3>Сценарий важнее метража</h3><p>Маленький дом может работать превосходно. Большой — быть неудобным. Всё решает соответствие сценариям семьи.</p></div>
+      <div class="card"><span class="num">03</span><h3>Пространство существует во времени</h3><p>Дом живёт по-разному утром, днём и вечером. Хорошая планировка учитывает суточные ритмы.</p></div>
+    </div>
+    <p style="margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--gold)">дальше — поворот направо →</p>
+  </section>
+
+  <section class="scene d" data-name="Методология">
+    <span class="tag">02 · Методология</span>
+    <h2 class="h2">Сценарии до стен</h2>
+    <p class="lead">Прежде чем появится первый чертёж, мы проводим глубокое интервью. Не «что вы хотите увидеть», а «как вы хотите жить».</p>
+    <div class="cards">
+      <div class="card"><h3>Сценарии жизни</h3><p>Типичный день, неделя, год: кто живёт, как работают, как отдыхают.</p><span class="q">«Прежде чем рисовать стены, мы описываем вашу жизнь»</span></div>
+      <div class="card"><h3>Функционал жизни</h3><p>Где готовить завтрак на двух детей, где принять 20 гостей, где работать без шума.</p><span class="q">«Каждый метр должен знать, зачем он существует»</span></div>
+      <div class="card"><h3>Эргономика пространства</h3><p>Расстояния, маршруты, высоты, пропорции, свет — под ваши сценарии.</p><span class="q">«Дом, который работает — без усилий»</span></div>
+    </div>
+    <p style="margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text)">Из реального интервью: <span class="gold">кто первым встаёт утром — и куда идёт?</span> · как часто вы работаете из дома? · сколько бывает гостей? · каким вы видите идеальный вечер через 5 лет?</p>
+    <p style="margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--gold)">← дальше — поворот налево</p>
+  </section>
+
+  <section class="scene d" data-name="Услуги">
+    <span class="tag">03 · Услуги и стоимость</span>
+    <h2 class="h2">Что мы делаем</h2>
+    <div style="margin-top:8px">
+      <div class="srv"><div><h3>Сценарный анализ и планировочное решение</h3><p>Интервью, карта жизни, 2–3 варианта планировки, эскизный проект.</p></div><div class="price">от 1 200 ₽/м²</div></div>
+      <div class="srv"><div><h3>Реконструкция коттеджа</h3><p>Пересмотр пространства через призму новых сценариев. Конструкции, планировка, рабочая документация.</p></div><div class="price">от 1 500 ₽/м²</div></div>
+      <div class="srv"><div><h3>Полный дизайн-проект</h3><p>Сценарный анализ + планировка + развёртки + освещение + спецификации.</p></div><div class="price">от 1 500 ₽/м²</div></div>
+      <div class="srv"><div><h3>3D-визуализация сценариев</h3><p>Не «как выглядит», а «как выглядит в момент использования»: утро, вечер, гости.</p></div><div class="price">от 120 000 ₽</div></div>
+      <div class="srv"><div><h3>Авторский надзор</h3><p>Контроль соответствия проекту и сценариям на каждом этапе стройки.</p></div><div class="price">от 100 000 ₽/мес.</div></div>
+      <div class="srv"><div><h3>Консультация по эргономике</h3><p>Аудит пространства: что работает, что мешает, как исправить.</p></div><div class="price">2 500 ₽/час</div></div>
+    </div>
+  </section>
+
+  <section class="scene d" data-name="Этапы">
+    <span class="tag">04 · Этапы работы</span>
+    <h2 class="h2">От сценария до сданного проекта</h2>
+    <div class="steps">
+      <div class="step"><div class="n">01</div><div><h3>Интервью и сценарный анализ</h3><p>Карта сценариев, выезд на объект, замеры, обследование.</p><span class="dur">1–2 недели</span></div></div>
+      <div class="step"><div class="n">02</div><div><h3>Концепции планировок</h3><p>2–3 варианта под приоритетные сценарии, презентация с обоснованием.</p><span class="dur">3 недели</span></div></div>
+      <div class="step"><div class="n">03</div><div><h3>Детальная проработка</h3><p>Каждое помещение — через сценарий использования.</p><span class="dur">4–6 недель</span></div></div>
+      <div class="step"><div class="n">04</div><div><h3>Утверждение планировки</h3><p>Финальный план. При необходимости — фальш-стены для «прохождения» сценариев.</p><span class="dur">по итогу этапа 3</span></div></div>
+      <div class="step"><div class="n">05</div><div><h3>Рабочая документация</h3><p>Чертежи, развёртки, спецификации с комментариями по сценариям.</p><span class="dur">4–6 недель</span></div></div>
+      <div class="step"><div class="n">06</div><div><h3>Авторский надзор</h3><p>Сопровождение стройки, контроль эргономических решений.</p><span class="dur">по договору</span></div></div>
+    </div>
+  </section>
+
+  <section class="scene d" data-name="Кейс 1/3">
+    <span class="tag">05 · Истории трансформации — 1/3</span>
+    <h2 class="h2">Дом, где кухня была тупиком</h2>
+    <p class="cmeta">реконструкция коттеджа · 240 м² · семья с детьми 4 и 8 лет</p>
+    <div class="case-grid">
+      <div class="cb"><h4>Жизнь до</h4><p>Кухня в дальнем углу. Мама готовит — и не видит детей. Игровая на втором этаже пустует.</p></div>
+      <div class="cb"><h4>Инсайт интервью</h4><p>Ключевой сценарий — «визуальный контроль из кухни». Не отдельная игровая, а игровая зона в поле зрения.</p></div>
+      <div class="cb"><h4>Что изменили</h4><p>Кухню развернули к гостиной, убрали перегородку, игровую встроили в кухню-гостиную.</p></div>
+      <div class="cb"><h4>Жизнь после</h4><p>Маршрут «плита — стол — игровая» сократился с 14 метров до 4. Все в поле зрения.</p></div>
+      <div class="cq">«Я впервые готовлю ужин и не кричу "что у вас там происходит?!"<span class="who">— заказчица, Николина Гора</span></div>
+    </div>
+  </section>
+
+  <section class="scene d" data-name="Кейс 2/3">
+    <span class="tag">05 · Истории трансформации — 2/3</span>
+    <h2 class="h2">Кабинет с отдельным входом</h2>
+    <p class="cmeta">планировочное решение · 180 м² · пара, оба на удалёнке</p>
+    <div class="case-grid">
+      <div class="cb"><h4>Жизнь до</h4><p>Оба супруга на удалёнке за одним обеденным столом. Созвоны пересекаются, клиенты психолога идут через гостиную.</p></div>
+      <div class="cb"><h4>Инсайт интервью</h4><p>Проблема не в метраже — в маршрутах: «клиентский» и «семейный» потоки не должны пересекаться.</p></div>
+      <div class="cb"><h4>Что изменили</h4><p>Кабинет с мини-приёмной и отдельным входом с террасы, звукоизоляция. Второе рабочее место — в нише спальни.</p></div>
+      <div class="cb"><h4>Жизнь после</h4><p>Два независимых рабочих сценария в одном доме — без пристройки.</p></div>
+      <div class="cq">«Клиенты больше не видят нашу сушилку с бельём. А я не слышу чужие созвоны.»<span class="who">— заказчики, Истра</span></div>
+    </div>
+  </section>
+
+  <section class="scene d" data-name="Кейс 3/3">
+    <span class="tag">05 · Истории трансформации — 3/3</span>
+    <h2 class="h2">Большой дом, в котором негде уединиться</h2>
+    <p class="cmeta">реконструкция коттеджа · 420 м² · три поколения</p>
+    <div class="case-grid">
+      <div class="cb"><h4>Жизнь до</h4><p>420 метров открытых пространств — и ни одного тихого угла. Бабушка «отдыхала» в спальне днём.</p></div>
+      <div class="cb"><h4>Инсайт интервью</h4><p>Не хватало не общих зон, а градиента приватности: от шумной гостиной к личным тихим местам.</p></div>
+      <div class="cb"><h4>Что изменили</h4><p>«Громкое» и «тихое» крылья, читальный угол с зимним садом, личная терраса, буферные зоны между поколениями.</p></div>
+      <div class="cb"><h4>Жизнь после</h4><p>У каждого — свой уединённый сценарий. Спальни снова спальни, а не убежища.</p></div>
+      <div class="cq">«Мы стали больше времени проводить вместе — потому что теперь можем побыть порознь.»<span class="who">— заказчик, Новая Рига</span></div>
+    </div>
+  </section>
+
+  <section class="scene d" data-name="Отзывы">
+    <span class="tag">06 · Отзывы</span>
+    <h2 class="h2">Голоса людей, которые уже живут в результате</h2>
+    <div class="tst">
+      <div class="tsti"><p>«Теперь я могу спокойно работать из дома — кабинет действительно изолирован, а не "просто комната с дверью".»</p><span class="who">Марина · 140 м²</span></div>
+      <div class="tsti"><p>«Утром мы больше не сталкиваемся в одном санузле впятером. Решение стоило дешевле, чем год раздражения.»</p><span class="who">Сергей · 260 м²</span></div>
+      <div class="tsti"><p>«Нас спросили, кто первым встаёт. Ни один дизайнер раньше этим не интересовался.»</p><span class="who">Анна и Дмитрий</span></div>
+      <div class="tsti"><p>«Фальш-стены на этапе утверждения — гениально. Мы "прошли" будущий дом до стройки и поменяли два решения.»</p><span class="who">Игорь · 380 м²</span></div>
+    </div>
+  </section>
+
+  <section class="scene d" data-name="О студии">
+    <span class="tag">07 · О студии</span>
+    <h2 class="h2">Команда и подход</h2>
+    <p class="lead">ReDesign — московская студия с авторским подходом. Мы работаем не с декором, а с функциональными сценариями жизни: изучаем, как вы просыпаетесь, где пьёте кофе, где работаете, как встречаете гостей — и из этого рождается пространство.</p>
+    <p class="lead" style="margin-top:12px">Методология опирается на классическую эргономику и антропометрию (Panero &amp; Zelnik, Neufert), нейроархитектуру (ANFA) и сценарный подход мировых бюро — от Snøhetta до Roman and Williams.</p>
+    <p class="sig" style="margin-top:18px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(20px,3vw,28px)">«Мы не проектируем стены.<br>Мы проектируем вашу <span class="gold">жизнь</span> в этих стенах.»</p>
+  </section>
+
+  <!-- 10 ФОРМА -->
+  <section class="scene" data-name="Заявка">
+    <span class="tag">08 · Заявка</span>
+    <h2 class="h2">Расскажите, как вы хотите жить</h2>
+    <div class="form-wrap" id="leadform">
+      <div class="form-steps"><div class="fs-dot on" id="d1"></div><div class="fs-dot" id="d2"></div><div class="fs-dot" id="d3"></div></div>
+      <div class="fstep on" id="s1">
+        <h3>Шаг 1. Ваш объект</h3>
+        <p class="hint">Пара фактов о пространстве</p>
+        <span class="f-label">Тип объекта</span>
+        <div class="opt-group" data-field="type"><div class="opt">Коттедж</div><div class="opt">Квартира</div><div class="opt">Другое</div></div>
+        <span class="f-label">Площадь, м²</span>
+        <div class="opt-group" data-field="area"><div class="opt">до 100</div><div class="opt">100–200</div><div class="opt">200–400</div><div class="opt">400–600</div><div class="opt">свыше 600</div></div>
+        <span class="f-label">Основной запрос</span>
+        <div class="opt-group" data-field="request"><div class="opt">Планировочное решение</div><div class="opt">Реконструкция</div><div class="opt">Дизайн-проект</div><div class="opt">Консультация</div></div>
+        <div class="fnav"><span></span><button class="btn btn-primary" onclick="go(2)">Дальше</button></div>
+      </div>
+      <div class="fstep" id="s2">
+        <h3>Шаг 2. Ваши сценарии</h3>
+        <p class="hint">Что сейчас не работает? Выберите всё, что откликается.</p>
+        <div class="opt-group" data-field="pains" data-multi="1">
+          <div class="opt">Нет личного пространства — всё общее</div>
+          <div class="opt">Кухня оторвана от жизни семьи</div>
+          <div class="opt">Некомфортно работать из дома</div>
+          <div class="opt">Негде принять гостей нормально</div>
+          <div class="opt">Хаотичные маршруты — всё не под рукой</div>
+          <div class="opt">Хочу построить заново — с нуля по-человечески</div>
+        </div>
+        <div class="fnav"><button class="btn btn-ghost" onclick="go(1)">Назад</button><button class="btn btn-primary" onclick="go(3)">Дальше</button></div>
+      </div>
+      <div class="fstep" id="s3">
+        <h3>Шаг 3. Контакт</h3>
+        <p class="hint">Как с вами связаться</p>
+        <span class="f-label">Имя *</span>
+        <input class="finput" id="fname" type="text" placeholder="Как к вам обращаться">
+        <span class="f-label">Телефон *</span>
+        <input class="finput" id="fphone" type="tel" placeholder="+7 ___ ___-__-__">
+        <span class="f-label">Удобный способ связи</span>
+        <div class="opt-group" data-field="channel"><div class="opt">Позвоните</div><div class="opt">WhatsApp</div><div class="opt">Telegram</div></div>
+        <p style="font-size:11px;color:var(--text);margin-bottom:12px">Нажимая «Отправить», вы соглашаетесь с политикой конфиденциальности (152-ФЗ).</p>
+        <div class="fnav"><button class="btn btn-ghost" onclick="go(2)">Назад</button><button class="btn btn-primary" onclick="submitForm()">Отправить</button></div>
+      </div>
+      <div class="form-done" id="sdone">
+        <h3>Спасибо! Сценарное интервью уже началось.</h3>
+        <p>Мы свяжемся с вами в течение рабочего дня.</p>
+      </div>
+    </div>
+    <p style="margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text)">+7 988 209-71-20 · redesign.buro@yandex.ru · Москва</p>
+  </section>
+</div>
+
+<div id="walk"></div>
+
+<div id="progress"></div>
+<div id="hud-top">
+  <a class="logo" href="#" onclick="goScene(0);return false">Re<span>Design</span></a>
+  <a id="hud-phone" href="tel:+79882097120">+7 988 209-71-20</a>
+</div>
+<div id="hud-scene">сцена 01/11 · вход</div>
+<div id="dots"></div>
+
+
+<script>
+(function(){
+  var allScenes = Array.prototype.slice.call(document.querySelectorAll('.scene'));
+  var SHARED = {'Вход':1,'Заявка':1};
+  var mq = window.matchMedia('(min-width: 768px)');
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var walk = document.getElementById('walk');
+  var hold = document.getElementById('hold');
+  var hudScene = document.getElementById('hud-scene');
+  var progress = document.getElementById('progress');
+  var dotsBox = document.getElementById('dots');
+
+  // m — множитель яркости линий: на телефоне комната чётче
+  function makeDecor(m, portrait){
+  var w = m > 1 ? 1.3 : 1, wd = m > 1 ? 1.4 : 1.1;
+  var LN = 'stroke="rgba(248,247,244,'+(0.14*m).toFixed(2)+')" stroke-width="'+w+'" fill="none"';
+  var FL = 'stroke="rgba(201,168,76,'+(0.10*m).toFixed(2)+')" stroke-width="0.8" fill="none"';
+  var DC = 'stroke="rgba(201,168,76,'+(0.26*m).toFixed(2)+')" stroke-width="'+wd+'" fill="none"';
+  var DCF = 'fill="rgba(201,168,76,'+(0.22*m).toFixed(2)+')" stroke="rgba(201,168,76,'+(0.32*m).toFixed(2)+')" stroke-width="0.8"';
+
+  var DECOR = {
+    windowL: '<path d="M80,200 L230,247 L230,399 L80,421 Z" '+DC+'/><path d="M155,224 L155,410 M80,310 L230,323" '+DC+'/>',
+    windowR: '<path d="M920,200 L770,247 L770,399 L920,421 Z" '+DC+'/><path d="M845,224 L845,410 M920,310 L770,323" '+DC+'/>',
+    doorL:   '<path d="M80,649 L80,320 L220,329 L220,561 Z" '+DC+'/><circle cx="205" cy="450" r="5" '+DCF+'/>',
+    doorR:   '<path d="M920,649 L920,320 L780,329 L780,561 Z" '+DC+'/><circle cx="795" cy="450" r="5" '+DCF+'/>',
+    pictureL:'<path d="M110,254 L190,280 L190,352 L110,366 Z" '+DC+'/><path d="M122,340 L176,296" stroke="rgba(201,168,76,.2)" stroke-width="0.8" fill="none"/>',
+    pictureR:'<path d="M890,254 L810,280 L810,352 L890,366 Z" '+DC+'/><path d="M878,340 L824,296" stroke="rgba(201,168,76,.2)" stroke-width="0.8" fill="none"/>',
+    clockL:  '<ellipse cx="160" cy="300" rx="17" ry="22" '+DC+'/><path d="M160,300 L160,286 M160,300 L169,306" '+DC+'/>',
+    pendant: '<path d="M400,112 L400,190" '+DC+'/><path d="M386,190 L414,190 L424,214 L376,214 Z" '+DC+'/>',
+    chandelier: '<path d="M500,96 L500,156" '+DC+'/><ellipse cx="500" cy="156" rx="11" ry="6" '+DC+'/><path d="M500,156 C478,156 464,168 462,184 M500,156 C522,156 536,168 538,184 M500,156 C491,160 486,170 485,186 M500,156 C509,160 514,170 515,186" '+DC+'/><circle cx="462" cy="188" r="4" '+DCF+'/><circle cx="538" cy="188" r="4" '+DCF+'/><circle cx="485" cy="190" r="3.5" '+DCF+'/><circle cx="515" cy="190" r="3.5" '+DCF+'/>',
+    stucco: '<path d="M96,32 L904,32 L666,172 L334,172 Z" '+FL+'/><ellipse cx="500" cy="102" rx="56" ry="23" '+DC+'/><ellipse cx="500" cy="102" rx="30" ry="12" '+DC+'/>',
+    plant:   '<path d="M852,600 L888,600 L882,632 L858,632 Z" '+DC+'/><path d="M870,600 C870,572 858,562 846,556 M870,600 C870,566 882,558 894,552 M870,600 C868,564 870,548 870,538" '+DC+'/>',
+    cat:     '<g transform="translate(150,505) scale(0.8)"><path d="M20,95 C6,95 0,80 8,70 C12,64 18,66 18,72 C18,79 21,84 28,86 C22,72 20,55 28,42 C33,34 40,29 47,28 L49,15 L58,24 L66,16 L68,28 C77,31 83,42 83,56 C83,76 74,91 56,95 Z" '+DCF+'/></g>',
+    catR:    '<g transform="translate(850,505) scale(0.8,-0.8) rotate(180)"><path d="M20,95 C6,95 0,80 8,70 C12,64 18,66 18,72 C18,79 21,84 28,86 C22,72 20,55 28,42 C33,34 40,29 47,28 L49,15 L58,24 L66,16 L68,28 C77,31 83,42 83,56 C83,76 74,91 56,95 Z" '+DCF+'/></g>'
+  };
+  // силуэты только на боковых стенах, потолке и по краям пола —
+  // задняя стена чистая, чтобы не «биться в неё лбом»
+  // Портретная геометрия (телефон): viewBox 500x1000, перспектива пересчитана,
+  // пропорции стен и силуэтов честные, без растяжения
+  var CATP = 'M20,95 C6,95 0,80 8,70 C12,64 18,66 18,72 C18,79 21,84 28,86 C22,72 20,55 28,42 C33,34 40,29 47,28 L49,15 L58,24 L66,16 L68,28 C77,31 83,42 83,56 C83,76 74,91 56,95 Z';
+  // задняя стена почти квадратная (300x320) — комната широкая, а не «шахта»
+  var DECOR_P = {
+    windowL: '<path d="M20,332 L70,412 L70,553 L20,601 Z" '+DC+'/><path d="M45,372 L45,577 M20,467 L70,483" '+DC+'/>',
+    windowR: '<path d="M480,332 L430,412 L430,553 L480,601 Z" '+DC+'/><path d="M455,372 L455,577 M480,467 L430,483" '+DC+'/>',
+    doorL:   '<path d="M20,920 L20,458 L72,479 L72,712 Z" '+DC+'/><circle cx="63" cy="577" r="4" '+DCF+'/>',
+    doorR:   '<path d="M480,920 L480,458 L428,479 L428,712 Z" '+DC+'/><circle cx="437" cy="577" r="4" '+DCF+'/>',
+    pictureL:'<path d="M26,365 L70,425 L70,500 L26,500 Z" '+DC+'/><path d="M33,482 L62,436" stroke="rgba(201,168,76,'+(0.2*m).toFixed(2)+')" stroke-width="0.8" fill="none"/>',
+    pictureR:'<path d="M474,365 L430,425 L430,500 L474,500 Z" '+DC+'/><path d="M467,482 L438,436" stroke="rgba(201,168,76,'+(0.2*m).toFixed(2)+')" stroke-width="0.8" fill="none"/>',
+    clockL:  '<ellipse cx="45" cy="436" rx="9" ry="16" '+DC+'/><path d="M45,436 L45,423 M45,436 L51,441" '+DC+'/>',
+    pendant: '<path d="M250,170 L250,282" '+DC+'/><path d="M236,282 L264,282 L274,308 L226,308 Z" '+DC+'/>',
+    chandelier: '<path d="M250,130 L250,225" '+DC+'/><ellipse cx="250" cy="225" rx="10" ry="5" '+DC+'/><path d="M250,225 C230,225 220,238 218,252 M250,225 C270,225 280,238 282,252 M250,225 C242,229 238,240 237,256 M250,225 C258,229 262,240 263,256" '+DC+'/><circle cx="218" cy="255" r="3.5" '+DCF+'/><circle cx="282" cy="255" r="3.5" '+DCF+'/><circle cx="237" cy="259" r="3" '+DCF+'/><circle cx="263" cy="259" r="3" '+DCF+'/>',
+    stucco:  '<path d="M28,22 L472,22 L404,292 L96,292 Z" '+FL+'/><ellipse cx="250" cy="155" rx="44" ry="19" '+DC+'/><ellipse cx="250" cy="155" rx="24" ry="10" '+DC+'/>',
+    plant:   '<path d="M402,775 L438,775 L432,807 L408,807 Z" '+DC+'/><path d="M420,775 C420,750 410,742 400,736 M420,775 C420,746 430,740 440,734 M420,775 C418,744 420,730 420,722" '+DC+'/>',
+    cat:     '<g transform="translate(140,628) scale(0.75)"><path d="'+CATP+'" '+DCF+'/></g>',
+    catR:    '<g transform="translate(360,628) scale(0.75,-0.75) rotate(180)"><path d="'+CATP+'" '+DCF+'/></g>'
+  };
+  return function(names){
+    var s, dec;
+    if(portrait){
+      dec = DECOR_P;
+      s = '<svg viewBox="0 0 500 1000" preserveAspectRatio="none">';
+      s += '<rect x="80" y="320" width="340" height="360" '+LN+'/>';
+      s += '<path d="M0,0 L80,320 M500,0 L420,320 M0,1000 L80,680 M500,1000 L420,680" '+LN+'/>';
+      s += '<path d="M148,680 L100,1000 M216,680 L200,1000 M284,680 L300,1000 M352,680 L400,1000" '+FL+'/>';
+      s += '<path d="M55,780 L445,780 M28,890 L472,890" '+FL+'/>';
+    } else {
+      dec = DECOR;
+      s = '<svg viewBox="0 0 1000 700" preserveAspectRatio="none">';
+      s += '<rect x="300" y="190" width="400" height="320" '+LN+'/>';
+      s += '<path d="M0,0 L300,190 M1000,0 L700,190 M0,700 L300,510 M1000,700 L700,510" '+LN+'/>';
+      s += '<path d="M380,510 L237,700 M460,510 L412,700 M540,510 L588,700 M620,510 L763,700" '+FL+'/>';
+      s += '<path d="M221,560 L779,560 M110,630 L890,630" '+FL+'/>';
+    }
+    names.forEach(function(n){ s += dec[n] || ''; });
+    return s + '</svg>';
+  };
+  }
+  // декор по режимам; потолки чередуются: люстра / лепнина / лампа
+  var DEC_M = [
+    ['doorL','chandelier'], ['windowL','stucco'], ['pictureL','pendant'],
+    ['pictureR','stucco'], ['clockL','chandelier'], ['windowR','stucco'],
+    ['doorR','pendant'], ['pictureL','chandelier'], ['pictureR','stucco'],
+    ['windowL','pendant'], ['windowL','cat','stucco'], ['doorL','chandelier'],
+    ['windowR','catR','pendant'], ['pictureL','stucco'], ['pictureR','chandelier'],
+    ['windowL','plant','stucco'], ['doorR','pendant']
+  ];
+  var DEC_D = [
+    ['doorL','chandelier'], ['windowL','stucco'], ['doorR','clockL','pendant'],
+    ['pictureL','pictureR','chandelier'], ['windowR','plant','stucco'],
+    ['windowL','cat','pendant'], ['doorL','chandelier'], ['windowR','catR','stucco'],
+    ['pictureL','pendant'], ['windowL','plant','chandelier'], ['doorR','stucco']
+  ];
+  var TURN_M = 11, TURN_D = 6;
+
+
+  // ===== гибридная раскладка: сегменты «комнаты» (sticky-глубина) и «плоские» (обычный скролл) =====
+  var VH = 120, EXIT = 0.8;
+  var SEG_M = [
+    {type:'rooms', count:5, turns:[{after:1,dir:1}], exit:{dir:-1}}, // вход, подход →направо, принципы 1-3, выход налево
+    {type:'flat',  count:5},                                        // методология … этапы
+    {type:'rooms', count:3},                                        // кейсы 1-3
+    {type:'flat',  count:4}                                         // отзывы … заявка
+  ];
+  var SEG_D = [
+    {type:'rooms', count:4, turns:[{after:1,dir:1},{after:2,dir:-1}]}, // вход, подход →направо, методология →налево, услуги
+    {type:'flat',  count:5},                                           // этапы … отзывы
+    {type:'rooms', count:1},                                           // о студии
+    {type:'flat',  count:1}                                            // заявка
+  ];
+
+  var scenes = [], segs = [], N = 0, dots;
+
+  function el(cls){ var d = document.createElement('div'); d.className = cls; return d; }
+
+  function initWalk(){
+    var desktop = mq.matches;
+    allScenes.forEach(function(s){ s.style.cssText=''; s.classList.remove('flow','light','dark'); hold.appendChild(s); });
+    walk.innerHTML = '';
+    scenes = allScenes.filter(function(s){
+      var isD = s.classList.contains('d');
+      return SHARED[s.getAttribute('data-name')] || (desktop ? isD : !isD);
+    });
+    N = scenes.length;
+    var cfgs = desktop ? SEG_D : SEG_M;
+    var dec = desktop ? DEC_D : DEC_M;
+    var roomSVG = makeDecor(desktop ? 1 : 1.6, !desktop);
+    segs = []; var gi = 0;
+    cfgs.forEach(function(cfg){
+      var seg = {type:cfg.type, base:gi, n:cfg.count, scenes:[], rooms:[], cam:null, turns:[], exit:null, span:0};
+      var k;
+      if(cfg.type === 'rooms'){
+        seg.turns = (cfg.turns||[]).map(function(T){ return {i:T.after+1, dir:T.dir}; });
+        seg.exit = cfg.exit || null;
+        seg.span = (cfg.count-1) + (seg.exit ? EXIT : 0);
+        var wrap = el('rseg'), stage = el('rstage');
+        wrap.style.height = 'calc(' + (seg.span*VH) + 'vh + 100vh)';
+        wrap.appendChild(stage);
+        for(k=0;k<cfg.count;k++){
+          var r = el('room');
+          r.innerHTML = roomSVG(dec[gi+k] || []);
+          stage.appendChild(r); seg.rooms.push(r);
+        }
+        for(k=0;k<cfg.count;k++){ stage.appendChild(scenes[gi+k]); seg.scenes.push(scenes[gi+k]); }
+        seg.el = wrap; seg.stage = stage;
+        walk.appendChild(wrap);
+      } else {
+        var fw = el('fseg');
+        for(k=0;k<cfg.count;k++){
+          var s = scenes[gi+k];
+          s.classList.add('flow', k%2===0 ? 'light' : 'dark');
+          fw.appendChild(s); seg.scenes.push(s);
+        }
+        seg.el = fw;
+        walk.appendChild(fw);
+      }
+      gi += cfg.count;
+      segs.push(seg);
+    });
+    dotsBox.innerHTML = '';
+    scenes.forEach(function(s,i){
+      var btn = document.createElement('button');
+      btn.title = s.getAttribute('data-name');
+      btn.addEventListener('click', function(){ goScene(i); });
+      dotsBox.appendChild(btn);
+    });
+    dots = dotsBox.children;
+  }
+
+  function segForScene(i){
+    for(var k=0;k<segs.length;k++) if(i>=segs[k].base && i<segs[k].base+segs[k].n) return segs[k];
+    return null;
+  }
+
+  window.goScene = function(i){
+    var seg = segForScene(i); if(!seg) return;
+    var top = seg.el.getBoundingClientRect().top + scrollY;
+    var target = (seg.type==='rooms')
+      ? top + (i-seg.base) * (VH/100)*innerHeight
+      : seg.scenes[i-seg.base].getBoundingClientRect().top + scrollY;
+    window.scrollTo({top:target, behavior:reduced?'auto':'smooth'});
+  };
+  window.goLast = function(){ goScene(N-1); };
+  window.goCases = function(){
+    for(var i=0;i<N;i++) if((scenes[i].getAttribute('data-name')||'').indexOf('Кейс')===0){ goScene(i); return; }
+  };
+  mq.addEventListener('change', function(){ initWalk(); window.scrollTo(0,0); });
+
+  var pad = function(n){ return (n<10?'0':'')+n; };
+  var PLATEAU = 0.5, HALF = PLATEAU/2;
+  function plateau(t){
+    var n = Math.round(t), d = t - n;
+    if(Math.abs(d) <= HALF) return n;
+    return n + (d>0 ? (d-HALF) : (d+HALF)) / (0.5-HALF) * 0.5;
+  }
+  function isTurn(seg,k){ for(var j=0;j<seg.turns.length;j++) if(seg.turns[j].i===k) return true; return false; }
+  function isPrev(seg,k){ for(var j=0;j<seg.turns.length;j++) if(seg.turns[j].i-1===k) return true; return false; }
+  function turnFX(seg,k,d,t){
+    var tx=0, ry=0, j, T, q, p;
+    for(j=0;j<seg.turns.length;j++){
+      T = seg.turns[j];
+      if(k >= T.i){ q = Math.min(1, Math.max(0, T.i - t)); tx += q*72*T.dir; ry += -q*52*T.dir; }
+      if(k === T.i-1 && d < 0){ p = Math.min(-d,1); tx += -p*72*T.dir; ry += p*52*T.dir; }
+    }
+    if(!tx && !ry) return '';
+    return ' translateX('+tx.toFixed(2)+'vw) rotateY('+ry.toFixed(2)+'deg)';
+  }
+
+  function renderSeg(seg){
+    var vh = innerHeight;
+    var rect = seg.el.getBoundingClientRect();
+    var range = seg.el.offsetHeight - vh;
+    var raw = range>0 ? Math.min(1, Math.max(0, -rect.top/range)) * seg.span : 0;
+    var tt = raw <= seg.n-1 ? plateau(raw) : raw;
+    if(seg.cam===null) seg.cam = tt;
+    seg.cam += (tt - seg.cam) * (reduced?1:0.16);
+    if(Math.abs(tt-seg.cam) < 0.0004) seg.cam = tt;
+    var t = seg.cam;
+    var tc = Math.min(t, seg.n-1);
+    var exitP = seg.exit ? Math.min(1, Math.max(0, (t-(seg.n-1))/EXIT)) : 0;
+    seg.scenes.forEach(function(s,k){
+      var d = k - tc, scale, op, blur;
+      if(d>=0){ scale=1/(1+d*1.35); op=Math.max(0,1-d*0.6); blur=Math.min(14,d*7); }
+      else { var bb=-d; scale=1+bb*1.6; op=Math.max(0,1-bb*2.4); blur=bb*12; }
+      if(isTurn(seg,k) && d>0){ scale=1/(1+d*0.5); blur*=0.5; op=Math.max(0,1-d*0.75); }
+      if(isPrev(seg,k) && d<0){ scale=1+(-d)*0.15; blur*=0.5; op=Math.max(0,1-(-d)*1.5); }
+      var extra = turnFX(seg,k,d,t);
+      if(exitP>0 && k===seg.n-1){
+        var dir = seg.exit.dir;
+        extra = ' translateX('+(-exitP*72*dir).toFixed(2)+'vw) rotateY('+(exitP*52*dir).toFixed(2)+'deg)';
+        scale = 1 + exitP*0.15; op = Math.max(0, 1-exitP*1.2); blur = 0;
+      }
+      if(reduced){ blur=0; scale=Math.abs(d)<0.5?1:scale; }
+      s.style.transform = 'translate(-50%,-50%)' + extra + ' scale('+scale.toFixed(4)+')';
+      s.style.opacity = op.toFixed(3);
+      s.style.filter = blur>0.2 ? 'blur('+blur.toFixed(1)+'px)' : 'none';
+      s.style.visibility = op<=0.01 ? 'hidden':'visible';
+      s.style.pointerEvents = (Math.abs(d)<0.45 && exitP===0) ? 'auto':'none';
+      s.style.zIndex = Math.round(1000 - d*10);
+    });
+    seg.rooms.forEach(function(r,k){
+      var d = k - tc, scale, op;
+      if(d>=0){ scale=1/(1+d*1.35); op=Math.max(0,0.95-d*0.75); }
+      else { var bb=-d; scale=1+bb*1.9; op=Math.max(0,0.95-bb*1.35); }
+      if(isTurn(seg,k) && d>0){ scale=1/(1+d*0.5); }
+      if(isPrev(seg,k) && d<0){ scale=1+(-d)*0.15; }
+      var extra = turnFX(seg,k,d,t);
+      if(exitP>0 && k===seg.n-1){
+        var dir = seg.exit.dir;
+        extra = ' translateX('+(-exitP*72*dir).toFixed(2)+'vw) rotateY('+(exitP*52*dir).toFixed(2)+'deg)';
+        scale = 1+exitP*0.15; op = Math.max(0, 0.95-exitP*1.2);
+      }
+      r.style.transform = (extra+' scale('+scale.toFixed(4)+')').trim();
+      r.style.opacity = op.toFixed(3);
+      r.style.visibility = op<=0.01?'hidden':'visible';
+    });
+  }
+
+  function currentScreen(){
+    var mid = innerHeight/2;
+    for(var k=0;k<segs.length;k++){
+      var seg = segs[k], rect = seg.el.getBoundingClientRect();
+      if(rect.top<=mid && rect.bottom>=mid){
+        if(seg.type==='rooms'){
+          var range = seg.el.offsetHeight - innerHeight;
+          var raw = range>0 ? Math.min(1,Math.max(0,-rect.top/range))*seg.span : 0;
+          return seg.base + Math.min(seg.n-1, Math.max(0, Math.round(Math.min(raw, seg.n-1))));
+        }
+        for(var j=0;j<seg.scenes.length;j++){
+          var r2 = seg.scenes[j].getBoundingClientRect();
+          if(r2.top<=mid && r2.bottom>=mid) return seg.base+j;
+        }
+        return seg.base;
+      }
+    }
+    return 0;
+  }
+
+  function loop(){
+    for(var k=0;k<segs.length;k++){
+      if(segs[k].type!=='rooms') continue;
+      var rect = segs[k].el.getBoundingClientRect();
+      if(rect.bottom < -innerHeight || rect.top > innerHeight*2) continue;
+      renderSeg(segs[k]);
+    }
+    var cur = currentScreen();
+    hudScene.textContent = 'экран ' + pad(cur+1) + '/' + pad(N) + ' · ' + (scenes[cur].getAttribute('data-name')||'').toLowerCase();
+    for(var i2=0;i2<dots.length;i2++) dots[i2].classList.toggle('on', i2===cur);
+    var max = document.documentElement.scrollHeight - innerHeight;
+    progress.style.width = (max>0 ? scrollY/max*100 : 0) + '%';
+    requestAnimationFrame(loop);
+  }
+
+  // автодоводка к идеальному фокусу — только внутри комнатных сегментов
+  var snapTimer = null, snapping = false;
+  window.addEventListener('scroll', function(){
+    if(snapping) return;
+    clearTimeout(snapTimer);
+    snapTimer = setTimeout(function(){
+      for(var k=0;k<segs.length;k++){
+        var seg = segs[k]; if(seg.type!=='rooms') continue;
+        var top = seg.el.getBoundingClientRect().top + scrollY;
+        var range = seg.el.offsetHeight - innerHeight;
+        if(range<=0) continue;
+        var raw = (scrollY-top)/range*seg.span;
+        if(raw > 0.02 && raw < seg.n-1+0.02){
+          var nearest = Math.min(seg.n-1, Math.max(0, Math.round(raw)));
+          var target = top + nearest/seg.span*range;
+          if(Math.abs(scrollY-target) > 4){
+            snapping = true;
+            window.scrollTo({top:target, behavior:reduced?'auto':'smooth'});
+            var guard = setInterval(function(){ if(Math.abs(scrollY-target)<2){ clearInterval(guard); snapping=false; } }, 100);
+            setTimeout(function(){ clearInterval(guard); snapping=false; }, 1400);
+          }
+          return;
+        }
+      }
+    }, 160);
+  }, {passive:true});
+
+  initWalk();
+  loop();
+})();
+</script>
+</body>
+</html>
