@@ -33,7 +33,7 @@ h1,h2,h3{font-family:'Cormorant Garamond',serif;color:var(--white);font-weight:6
 .scene.flow{position:relative;left:auto;top:auto;transform:none !important;opacity:1 !important;filter:none !important;visibility:visible !important;max-height:none;overflow:visible;width:100%;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:80px max(calc((100% - 1040px)/2),5vw);pointer-events:auto}
 .room{position:absolute;inset:0;will-change:transform,opacity;opacity:0;visibility:hidden;transform-origin:50% 50%}
 .room svg{width:100%;height:100%;display:block;filter:blur(1.8px)}
-@media(max-width:767px){.room svg{filter:blur(0.7px)}}
+@media(max-width:767px){.room svg{filter:blur(1.6px)}}
 
 /* ============ сцены ============ */
 .scene{
@@ -175,6 +175,38 @@ em.g{font-style:italic;color:var(--gold)}
 .scene.flow.light .btn-ghost{color:var(--navy);border-color:#d8d5cc}
 .sig{color:var(--white)}
 .scene.flow.light .sig{color:var(--navy)}
+
+/* ============================================================
+   СВЕТЛАЯ ТЕМА — основной режим погружения
+   Коридор-анфилада и контент-сцены переведены в светлый тон.
+   ============================================================ */
+body{background:#E9E6DE}
+.rstage{background:radial-gradient(ellipse at 50% 42%, #ffffff 0%, #f2efe8 58%, #e3ded3 100%)}
+/* HUD поверх светлого фона */
+.logo{color:var(--navy)}
+#hud-phone{color:var(--navy)}
+/* контент-сцены внутри «комнат» — тёмный текст на светлом коридоре */
+.rstage .scene,.rstage .scene .lead{color:#555}
+.rstage .scene h1,.rstage .scene h2,.rstage .scene h3{color:var(--navy)}
+.rstage .scene .card{background:#fff;border:1px solid #e3e0d7}
+.rstage .scene .card p{color:#555}
+.rstage .scene .card .num{color:var(--gold)}
+.rstage .scene .cb{background:#fff;border:1px solid #e3e0d7}
+.rstage .scene .cb p{color:#555}
+.rstage .scene .cq{color:var(--navy)}
+.rstage .scene .cq .who{color:#8a8778}
+.rstage .scene .cmeta{color:#8a8778}
+.rstage .scene .btn-ghost{color:var(--navy);border-color:#cfccc0}
+.rstage .scene .srv,.rstage .scene .step,.rstage .scene .lay{border-color:#e3e0d7}
+.rstage .scene .srv p,.rstage .scene .step p{color:#555}
+.rstage .scene .iqline{color:var(--navy);border-color:#e3e0d7}
+.rstage .scene .iqline span,.rstage .scene .lay .q,.rstage .scene .card .q{color:var(--gold)}
+/* флэт-секции: светлый с тёплым чередующимся тоном */
+.scene.flow.light.tint{background:#EFECE3}
+/* встроенное фото для «плоских» кейс-секций (десктоп-скролл) */
+.inlinephoto{display:block;width:100%;max-height:40vh;object-fit:cover;border:1px solid rgba(201,168,76,.5);border-radius:3px;margin:20px 0 0;box-shadow:0 16px 42px rgba(26,26,46,.16)}
+/* фото команды в секции «О студии» — портрет, показываем целиком по центру */
+.teamphoto{display:block;max-width:min(440px,90%);max-height:58vh;width:auto;height:auto;margin:22px auto 2px;border:1px solid rgba(201,168,76,.5);border-radius:4px;box-shadow:0 18px 44px rgba(26,26,46,.16)}
 </style>
 </head>
 <body>
@@ -340,6 +372,7 @@ em.g{font-style:italic;color:var(--gold)}
     <span class="tag">07 · О студии</span>
     <h2 class="h2">Команда и подход</h2>
     <p class="lead">ReDesign — московская студия. Мы работаем не с декором, а со сценариями жизни. Методология — классическая эргономика (Panero &amp; Zelnik, Neufert), нейроархитектура (ANFA), сценарный подход мировых бюро.</p>
+    <img class="teamphoto" loading="lazy" src="https://thb.tildacdn.com/tild3131-3837-4433-a630-393761666264/-/resize/1000x/noroot.png" alt="Команда бюро ReDesign">
     <p class="sig" style="margin-top:18px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(20px,4.6vw,28px)">«Мы не проектируем стены.<br>Мы проектируем вашу <span class="gold">жизнь</span> в этих стенах.»</p>
   </section>
 
@@ -450,6 +483,7 @@ em.g{font-style:italic;color:var(--gold)}
     <h2 class="h2">Команда и подход</h2>
     <p class="lead">ReDesign — московская студия с авторским подходом. Мы работаем не с декором, а с функциональными сценариями жизни: изучаем, как вы просыпаетесь, где пьёте кофе, где работаете, как встречаете гостей — и из этого рождается пространство.</p>
     <p class="lead" style="margin-top:12px">Методология опирается на классическую эргономику и антропометрию (Panero &amp; Zelnik, Neufert), нейроархитектуру (ANFA) и сценарный подход мировых бюро — от Snøhetta до Roman and Williams.</p>
+    <img class="teamphoto" loading="lazy" src="https://thb.tildacdn.com/tild3131-3837-4433-a630-393761666264/-/resize/1000x/noroot.png" alt="Команда бюро ReDesign">
     <p class="sig" style="margin-top:18px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(20px,3vw,28px)">«Мы не проектируем стены.<br>Мы проектируем вашу <span class="gold">жизнь</span> в этих стенах.»</p>
   </section>
 
@@ -519,6 +553,13 @@ em.g{font-style:italic;color:var(--gold)}
 (function(){
   var allScenes = Array.prototype.slice.call(document.querySelectorAll('.scene'));
   var SHARED = {'Вход':1,'Заявка':1};
+  // интерьерное фото — «окно» в стене комнаты, по имени сцены
+  var PHOTOMAP = {
+    'Вход':'https://thb.tildacdn.com/tild6264-3263-4639-b563-663334396265/-/resize/1400x/IMG_1151.JPG',
+    'Кейс 1/3':'https://thb.tildacdn.com/tild6233-6666-4464-a261-633061306237/-/resize/1400x/IMG_0652.JPG',
+    'Кейс 2/3':'https://thb.tildacdn.com/tild3964-6435-4538-b462-663861303864/-/resize/1400x/IMG_0683.JPG',
+    'Кейс 3/3':'https://thb.tildacdn.com/tild3831-6262-4163-a432-343362363563/-/resize/1400x/IMG_5334.JPG'
+  };
   var mq = window.matchMedia('(min-width: 768px)');
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var walk = document.getElementById('walk');
@@ -530,10 +571,10 @@ em.g{font-style:italic;color:var(--gold)}
   // m — множитель яркости линий: на телефоне комната чётче
   function makeDecor(m, portrait){
   var w = m > 1 ? 1.3 : 1, wd = m > 1 ? 1.4 : 1.1;
-  var LN = 'stroke="rgba(248,247,244,'+(0.14*m).toFixed(2)+')" stroke-width="'+w+'" fill="none"';
-  var FL = 'stroke="rgba(201,168,76,'+(0.10*m).toFixed(2)+')" stroke-width="0.8" fill="none"';
-  var DC = 'stroke="rgba(201,168,76,'+(0.26*m).toFixed(2)+')" stroke-width="'+wd+'" fill="none"';
-  var DCF = 'fill="rgba(201,168,76,'+(0.22*m).toFixed(2)+')" stroke="rgba(201,168,76,'+(0.32*m).toFixed(2)+')" stroke-width="0.8"';
+  var LN = 'stroke="rgba(26,26,46,'+(0.22*m).toFixed(2)+')" stroke-width="'+w+'" fill="none"';
+  var FL = 'stroke="rgba(26,26,46,'+(0.09*m).toFixed(2)+')" stroke-width="0.8" fill="none"';
+  var DC = 'stroke="rgba(176,140,54,'+(0.55*m).toFixed(2)+')" stroke-width="'+wd+'" fill="none"';
+  var DCF = 'fill="rgba(201,168,76,'+(0.40*m).toFixed(2)+')" stroke="rgba(176,140,54,'+(0.60*m).toFixed(2)+')" stroke-width="0.8"';
 
   var DECOR = {
     windowL: '<path d="M80,200 L230,247 L230,399 L80,421 Z" '+DC+'/><path d="M155,224 L155,410 M80,310 L230,323" '+DC+'/>',
@@ -611,7 +652,7 @@ em.g{font-style:italic;color:var(--gold)}
 
 
   // ===== гибридная раскладка: сегменты «комнаты» (sticky-глубина) и «плоские» (обычный скролл) =====
-  var VH = 120, EXIT = 0.8;
+  var VH = 120, EXIT = 0.5;
   var SEG_M = [
     {type:'rooms', count:5, turns:[{after:1,dir:1}], exit:{dir:-1}}, // вход, подход →направо, принципы 1-3, выход налево
     {type:'flat',  count:5},                                        // методология … этапы
@@ -631,7 +672,7 @@ em.g{font-style:italic;color:var(--gold)}
 
   function initWalk(){
     var desktop = mq.matches;
-    allScenes.forEach(function(s){ s.style.cssText=''; s.classList.remove('flow','light','dark'); hold.appendChild(s); });
+    allScenes.forEach(function(s){ s.style.cssText=''; s.classList.remove('flow','light','dark','tint'); var _ip=s.querySelector('.inlinephoto'); if(_ip)_ip.remove(); hold.appendChild(s); });
     walk.innerHTML = '';
     scenes = allScenes.filter(function(s){
       var isD = s.classList.contains('d');
@@ -640,7 +681,7 @@ em.g{font-style:italic;color:var(--gold)}
     N = scenes.length;
     var cfgs = desktop ? SEG_D : SEG_M;
     var dec = desktop ? DEC_D : DEC_M;
-    var roomSVG = makeDecor(desktop ? 1 : 1.6, !desktop);
+    var roomSVG = makeDecor(desktop ? 1 : 1.15, !desktop);
     segs = []; var gi = 0;
     cfgs.forEach(function(cfg){
       var seg = {type:cfg.type, base:gi, n:cfg.count, scenes:[], rooms:[], cam:null, turns:[], exit:null, span:0};
@@ -664,7 +705,13 @@ em.g{font-style:italic;color:var(--gold)}
         var fw = el('fseg');
         for(k=0;k<cfg.count;k++){
           var s = scenes[gi+k];
-          s.classList.add('flow', k%2===0 ? 'light' : 'dark');
+          s.classList.add('flow','light'); if(k%2===1) s.classList.add('tint');
+          var fPhoto = PHOTOMAP[s.getAttribute('data-name')];
+          if(fPhoto && !s.querySelector('.inlinephoto')){
+            var fim = document.createElement('img');
+            fim.className = 'inlinephoto'; fim.src = fPhoto; fim.alt = ''; fim.loading = 'lazy';
+            s.appendChild(fim);
+          }
           fw.appendChild(s); seg.scenes.push(s);
         }
         seg.el = fw;
@@ -827,6 +874,23 @@ em.g{font-style:italic;color:var(--gold)}
             window.scrollTo({top:target, behavior:reduced?'auto':'smooth'});
             var guard = setInterval(function(){ if(Math.abs(scrollY-target)<2){ clearInterval(guard); snapping=false; } }, 100);
             setTimeout(function(){ clearInterval(guard); snapping=false; }, 1400);
+          }
+          return;
+        }
+        // «хвост» выхода из лабиринта (включая холостой прогон липкой сцены ~100vh) —
+        // магнитим назад к последней комнате либо вперёд к началу скролл-части, чтобы не зависать в пустоте
+        var tailMax = seg.span + 100/VH;
+        if(seg.exit && raw >= seg.n-1+0.02 && raw <= tailMax+0.1){
+          var lastT = top + (seg.n-1)/seg.span*range;              // назад к последней комнате
+          var nextSeg = segs[k+1];
+          var fwdT = nextSeg ? (nextSeg.el.getBoundingClientRect().top + scrollY)
+                             : (top + seg.el.offsetHeight - innerHeight); // вперёд к следующей секции
+          var target2 = (raw < seg.n-1 + 0.25) ? lastT : fwdT;
+          if(Math.abs(scrollY-target2) > 4){
+            snapping = true;
+            window.scrollTo({top:target2, behavior:reduced?'auto':'smooth'});
+            var guard2 = setInterval(function(){ if(Math.abs(scrollY-target2)<2){ clearInterval(guard2); snapping=false; } }, 100);
+            setTimeout(function(){ clearInterval(guard2); snapping=false; }, 1400);
           }
           return;
         }
