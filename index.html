@@ -111,11 +111,11 @@ header.hidden{transform:translateY(-100%)}
 .mobile-menu .btn{margin-top:28px}
 
 /* ---------- hero ---------- */
-.hero{position:relative;background:var(--navy);color:var(--paper);padding:130px 0 70px;min-height:100svh;display:flex;align-items:center;overflow:hidden}
+.hero{position:relative;background:var(--navy);color:var(--paper);padding:130px 0 84px;overflow:hidden}
 .hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(248,247,244,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(248,247,244,.045) 1px,transparent 1px);background-size:56px 56px;mask-image:radial-gradient(ellipse at 70% 40%,#000 30%,transparent 75%)}
 .hero-grid{position:relative;display:grid;gap:48px;align-items:center}
-@media(min-width:1024px){.hero-grid{grid-template-columns:1.05fr .95fr;gap:60px}}
-.hero h1{color:var(--paper);font-size:clamp(38px,7vw,68px);font-weight:600;margin-bottom:24px}
+@media(min-width:1024px){.hero-grid{gap:64px}}
+.hero h1{color:var(--paper);font-size:clamp(38px,7vw,68px);font-weight:600;margin-bottom:24px;max-width:14em}
 .hero h1 em{font-style:italic;color:var(--gold)}
 .hero-sub{font-size:17px;color:rgba(248,247,244,.72);max-width:34em;margin-bottom:36px}
 @media(min-width:1280px){.hero-sub{font-size:19px}}
@@ -125,9 +125,40 @@ header.hidden{transform:translateY(-100%)}
 .hero-stats div:last-child{border-right:0;margin-right:0}
 .hero-stats b{display:block;font-family:var(--mono);font-size:24px;color:var(--gold);font-weight:500}
 .hero-stats span{font-size:12px;color:rgba(248,247,244,.55);letter-spacing:.04em}
-.hero-plan{position:relative}
-.hero-plan svg{width:100%;height:auto;filter:drop-shadow(0 24px 60px rgba(0,0,0,.35))}
-.plan-caption{font-family:var(--mono);font-size:11px;color:rgba(248,247,244,.45);letter-spacing:.12em;text-transform:uppercase;margin-top:14px;text-align:right}
+/* ---------- виджет плана: диалог + план + шкала решений ---------- */
+.plan-widget{position:relative;background:#FBFAF6;border:1px solid rgba(26,26,46,.10);border-radius:3px;box-shadow:0 26px 60px rgba(15,52,96,.20),0 2px 6px rgba(26,26,46,.06);overflow:hidden}
+.plan-widget::before{content:'';position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(26,26,46,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(26,26,46,.045) 1px,transparent 1px);background-size:44px 44px}
+.pw-main{position:relative;display:grid}
+@media(min-width:1024px){.pw-main{grid-template-columns:5fr 7fr}}
+.pw-dialog{padding:30px 28px 24px;display:flex;flex-direction:column}
+.pw-dialog .kicker{margin-bottom:8px}
+.pw-board{position:relative;background:#16213E;padding:8px 8px 26px}
+.pw-board svg{display:block;width:100%;height:auto}
+.pw-caption{position:absolute;right:16px;bottom:8px;font-family:var(--mono);font-size:10px;color:rgba(248,247,244,.45);letter-spacing:.12em;text-transform:uppercase;text-align:right}
+/* реплики диалога */
+.dlg{display:flex;flex-direction:column;gap:16px;margin-top:14px;min-height:340px}
+@media(max-width:1023px){.dlg{min-height:200px}}
+.dlg .b{opacity:0;transform:translateY(8px);transition:opacity .7s ease,transform .7s ease}
+.dlg .b.show{opacity:1;transform:none}
+.dlg .who{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#8a8880;display:block;margin-bottom:6px}
+.dlg .client p{font-family:var(--serif);font-style:italic;font-size:clamp(19px,1.8vw,22px);line-height:1.45;color:var(--navy)}
+.dlg .designer{border-left:2px solid var(--gold);padding-left:16px}
+.dlg .designer p{font-size:15px;line-height:1.55;color:rgba(26,26,46,.85)}
+.dlg .note p{font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;color:#8a8880}
+/* шкала принятия решений */
+.pw-scale{position:relative;padding:30px 36px 56px;border-top:1px solid rgba(26,26,46,.12)}
+.pw-track{position:relative;height:2px;background:rgba(26,26,46,.16)}
+.pw-fill{position:absolute;left:0;top:0;height:2px;width:0;background:var(--gold);transition:width .9s ease}
+.pw-pt{position:absolute;top:1px;transform:translate(-50%,-50%);background:none;border:0;cursor:pointer;padding:12px}
+.pw-pt .dot{display:block;width:12px;height:12px;border-radius:50%;background:#FBFAF6;border:2px solid rgba(26,26,46,.4);transition:all .3s;box-sizing:border-box}
+.pw-pt:hover .dot{border-color:var(--navy)}
+.pw-pt.done .dot{background:var(--navy);border-color:var(--navy)}
+.pw-pt.active .dot{background:var(--gold);border-color:var(--gold);box-shadow:0 0 0 5px rgba(201,168,76,.25)}
+.pw-pt .lbl{position:absolute;top:32px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(26,26,46,.55);white-space:nowrap;transition:color .3s}
+.pw-pt[data-edge="l"] .lbl{left:0;transform:none}
+.pw-pt[data-edge="r"] .lbl{left:auto;right:0;transform:none}
+.pw-pt.active .lbl{color:var(--navy);font-weight:700}
+@media(max-width:560px){.pw-dialog{padding:22px 18px 16px}.pw-scale{padding:24px 20px 50px}.pw-pt .lbl{font-size:9px;letter-spacing:.08em}}
 /* анимация отрисовки плана */
 .draw{stroke-dasharray:1600;stroke-dashoffset:1600;animation:draw 2.6s ease forwards}
 .draw.d2{animation-delay:.5s}
@@ -143,18 +174,15 @@ header.hidden{transform:translateY(-100%)}
 .person{opacity:0;transition:opacity .6s ease}
 .heat{opacity:0;transform:scale(.55);transform-box:fill-box;transform-origin:center;transition:opacity .8s ease,transform .8s ease}
 .heat.on{opacity:1;transform:scale(1);transition:opacity 3.2s ease-in,transform 3.2s ease-in}
+/* тепловой след конфликта — тянется за нетерпеливо ходящим человеком */
+.trailDot{opacity:.42;transition:opacity 2.8s ease}
+.trailDot.fade{opacity:0}
 .fadeL{transition:opacity .9s ease}
 #zoomG{transition:transform 1.35s ease-in-out;will-change:transform}
 .rebuild path,.rebuild rect,.rebuild circle{stroke-dasharray:260;stroke-dashoffset:260}
 .rebuild.go path,.rebuild.go rect,.rebuild.go circle{animation:wetDraw 1.6s ease forwards}
 @keyframes wetDraw{to{stroke-dashoffset:0}}
 
-/* переключатель плана */
-.plan-toggle{display:flex;margin-top:20px;border:1px solid var(--line-light)}
-.plan-toggle button{flex:1;background:transparent;border:0;color:rgba(248,247,244,.6);font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:14px 6px;cursor:pointer;transition:all .25s}
-.plan-toggle button+button{border-left:1px solid var(--line-light)}
-.plan-toggle button.active{background:var(--gold);color:var(--navy);font-weight:700}
-.plan-toggle button:not(.active):hover{color:var(--paper)}
 
 /* ---------- эргономика ---------- */
 .quote-band{font-family:var(--serif);font-style:italic;font-size:clamp(21px,3.6vw,30px);color:var(--navy);border-left:2px solid var(--gold);padding:6px 0 6px 26px;max-width:30em;margin:38px 0 0}
@@ -335,15 +363,6 @@ footer{background:var(--deep);color:rgba(248,247,244,.55);padding:44px 0;font-si
 }
 .hero .btn-ghost{color:var(--navy);border-color:var(--line)}
 .hero .btn-ghost:hover{color:var(--arch);border-color:var(--arch)}
-.hero-plan svg{filter:none;background:#FBFAF6;padding:18px;border:1px solid rgba(26,26,46,.10);border-radius:3px;box-shadow:0 26px 60px rgba(15,52,96,.20),0 2px 6px rgba(26,26,46,.06)}
-/* на мобильном бумажная рамка плана не нужна — экономим место (правило после базового, чтобы перебить) */
-@media(max-width:560px){.hero-plan svg{padding:0;border:0;border-radius:0;box-shadow:0 14px 30px rgba(15,52,96,.16)}}
-.plan-caption{color:#8a8880}
-.plan-toggle{border-color:var(--line)}
-.plan-toggle button{color:#7a7a82}
-.plan-toggle button+button{border-left-color:var(--line)}
-.plan-toggle button.active{background:var(--gold);color:var(--navy)}
-.plan-toggle button:not(.active):hover{color:var(--navy)}
 .scroll-hint{color:#8a8880}
 /* «Три слоя» */
 .layer{border-color:var(--line)}
@@ -427,8 +446,14 @@ figure.photo-fig figcaption{font-family:var(--mono);font-size:11px;letter-spacin
         <div><b>100%</b><span>под ваши сценарии</span></div>
       </div>
     </div>
-    <div class="hero-plan">
-      <svg viewBox="0 0 560 660" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Обмерный план квартиры по БТИ с экспликацией и сценарным тестом">
+    <div class="plan-widget" id="planWidget">
+      <div class="pw-main">
+        <div class="pw-dialog">
+          <div class="kicker">Диалог с дизайнером</div>
+          <div class="dlg" id="dlg"></div>
+        </div>
+        <div class="pw-board">
+      <svg viewBox="0 0 560 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Обмерный план квартиры по БТИ со сценарием принятых решений">
         <defs>
           <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#F8F7F4" stroke-width="1" opacity=".55"/></pattern>
           <radialGradient id="heatR"><stop offset="0" stop-color="#E05545" stop-opacity=".8"/><stop offset="1" stop-color="#E05545" stop-opacity="0"/></radialGradient>
@@ -436,20 +461,21 @@ figure.photo-fig figcaption{font-family:var(--mono);font-size:11px;letter-spacin
           <clipPath id="planClip"><rect x="18" y="18" width="524" height="464"/></clipPath>
         </defs>
         <!-- бумага плана -->
-        <rect x="18" y="18" width="524" height="624" fill="#16213E" stroke="rgba(248,247,244,.2)" stroke-width="1"/>
+        <rect x="18" y="18" width="524" height="464" fill="#16213E" stroke="rgba(248,247,244,.2)" stroke-width="1"/>
         <g stroke="rgba(248,247,244,.05)" stroke-width="1">
-          <path d="M18 90h524M18 162h524M18 234h524M18 306h524M18 378h524M18 450h524M18 522h524M18 594h524"/>
-          <path d="M90 18v624M162 18v624M234 18v624M306 18v624M378 18v624M450 18v624"/>
+          <path d="M18 90h524M18 162h524M18 234h524M18 306h524M18 378h524M18 450h524"/>
+          <path d="M90 18v464M162 18v464M234 18v464M306 18v464M378 18v464M450 18v464"/>
         </g>
 
         <g clip-path="url(#planClip)"><g id="zoomG">
         <!-- ======= БАЗА: наружные стены, окна, размеры ======= -->
         <g fill="none" stroke="#F8F7F4" stroke-width="3">
-          <path class="draw" d="M265 443 H190 V55 H435 V443 H295"/>
+          <path class="draw" d="M265 443 H190 V288 M190 258 V55 H435 V443 H295"/>
         </g>
         <g fill="none" stroke="#F8F7F4" stroke-width="1.4">
           <path class="draw d3" d="M250 443 V467 H330 V443"/>
         </g>
+        <path class="draw d3" d="M214 288 A24 24 0 0 0 190 264" fill="none" stroke="rgba(248,247,244,.5)" stroke-width="1.1"/>
         <g>
           <rect x="222" y="44" width="60" height="10" fill="url(#hatch)" stroke="#F8F7F4" stroke-width="1"/>
           <rect x="340" y="44" width="72" height="10" fill="url(#hatch)" stroke="#F8F7F4" stroke-width="1"/>
@@ -491,6 +517,7 @@ figure.photo-fig figcaption{font-family:var(--mono);font-size:11px;letter-spacin
           <g fill="none" stroke="rgba(248,247,244,.7)" stroke-width="1">
             <rect x="197" y="62" width="16" height="16"/><circle cx="205" cy="70" r="4"/>
             <rect x="197" y="96" width="14" height="12"/><path d="M197 102 h14"/>
+            <rect x="296" y="60" width="16" height="16"/><path d="M296 60 l16 16"/>
             <circle cx="207" cy="150" r="6"/><rect x="197" y="144" width="6" height="12"/>
             <rect x="196" y="180" width="12" height="10"/>
             <rect x="198" y="210" width="52" height="24" rx="9"/><rect x="203" y="214" width="42" height="16" rx="7"/>
@@ -511,39 +538,24 @@ figure.photo-fig figcaption{font-family:var(--mono);font-size:11px;letter-spacin
           </g>
         </g>
 
-        <!-- ======= СЛОЙ: сценарный тест «для семьи» ======= -->
+        <!-- ======= СЛОЙ СЦЕНАРИЯ: статичные стены + пары «до/после» на каждое решение ======= -->
         <g id="familyLayer" style="display:none">
-          <!-- статичные стены (без переделываемых узлов) -->
+          <!-- статичные внутренние стены (решениями не меняются) -->
           <g fill="none" stroke="#F8F7F4" stroke-width="1.6">
             <path d="M190 130 H280 M306 130 H318"/>
-            <path d="M318 55 V160 M318 186 V246"/>
-            <path d="M318 246 V300 M318 326 V443"/>
-            <path d="M258 130 V138 M258 156 V198 M258 216 V246 M190 246 H258"/>
+            <path d="M318 55 V64 M318 116 V160 M318 186 V197"/>
+            <path d="M190 246 H258"/>
             <path d="M258 246 H270 M306 246 H435"/>
-            <path d="M190 292 H240 M266 292 H318"/>
-          </g>
-          <g fill="none" stroke="rgba(248,247,244,.55)" stroke-width="1.1">
-            <path d="M280 130 A26 26 0 0 1 306 104"/>
-            <path d="M318 160 A26 26 0 0 1 344 186"/>
-            <path d="M240 292 A26 26 0 0 0 266 318"/>
-            <path d="M318 300 A26 26 0 0 1 344 326"/>
-            <path d="M258 138 A18 18 0 0 1 276 156"/>
-            <path d="M258 198 A18 18 0 0 1 276 216"/>
           </g>
           <g font-family="'JetBrains Mono',monospace" fill="rgba(248,247,244,.85)" text-anchor="middle">
             <g font-size="13">
               <text x="272" y="92">4</text><path d="M258 97 h28" stroke="rgba(248,247,244,.6)" stroke-width="1"/><text x="272" y="112">7.6</text>
               <text x="376" y="140">3</text><path d="M358 145 h36" stroke="rgba(248,247,244,.6)" stroke-width="1"/><text x="376" y="160">19.4</text>
-              <text x="254" y="352">1</text><path d="M236 357 h36" stroke="rgba(248,247,244,.6)" stroke-width="1"/><text x="254" y="372">14.4</text>
-              <text x="392" y="352">2</text><path d="M374 357 h36" stroke="rgba(248,247,244,.6)" stroke-width="1"/><text x="392" y="372">19.0</text>
             </g>
-            <g font-size="11" fill="rgba(248,247,244,.6)">
-              <text x="288" y="215">7</text>
-              <text x="230" y="275">8</text>
-            </g>
+            <g font-size="11" fill="rgba(248,247,244,.6)"><text x="230" y="275">8</text></g>
           </g>
 
-          <!-- санузел ДО: туалет + ванная -->
+          <!-- Р1 ДО: туалет + ванная -->
           <g id="famWetOld" class="fadeL">
             <path d="M190 172 H258" stroke="#F8F7F4" stroke-width="1.6" fill="none"/>
             <g fill="none" stroke="rgba(248,247,244,.7)" stroke-width="1">
@@ -552,18 +564,58 @@ figure.photo-fig figcaption{font-family:var(--mono);font-size:11px;letter-spacin
               <rect x="198" y="210" width="52" height="24" rx="9"/><rect x="203" y="214" width="42" height="16" rx="7"/>
             </g>
           </g>
-          <!-- санузел ПОСЛЕ: два узла, душ + туалет в каждом -->
+          <!-- Р1 ПОСЛЕ: два зеркальных санузла с душевыми -->
           <g id="famWetNew" class="fadeL rebuild" style="opacity:0">
             <path d="M190 188 H258" stroke="#F8F7F4" stroke-width="1.6" fill="none"/>
-            <g fill="none" stroke="rgba(248,247,244,.7)" stroke-width="1">
-              <rect x="194" y="134" width="20" height="20"/><path d="M194 134 l20 20"/>
-              <circle cx="236" cy="166" r="6"/><rect x="228" y="160" width="6" height="12"/>
-              <rect x="194" y="196" width="20" height="20"/><path d="M194 196 l20 20"/>
-              <circle cx="236" cy="228" r="6"/><rect x="228" y="222" width="6" height="12"/>
+            <g stroke="rgba(248,247,244,.85)" stroke-width="1" fill="none">
+              <rect x="191.5" y="143" width="6" height="12"/><circle cx="203.5" cy="149" r="6"/>
+              <rect x="193" y="174" width="12" height="9"/>
+              <path d="M241 160 H255 V185 H231 V170 Q231 160 241 160 Z" fill="none"/>
+              <path d="M255 160 H241 Q231 160 231 170 V185" stroke="rgba(248,247,244,.7)" stroke-width="1"/>
+              <circle cx="247" cy="176" r="2.6"/><path d="M247 171.4 v-1.8 M247 180.6 v1.8 M242.4 176 h-1.8 M251.6 176 h1.8" stroke-width=".8"/>
+              <path d="M252.5 165.5 h-9 M246 163.4 L243.5 165.5 l2.5 2.1" stroke-width=".9"/>
+              <rect x="193" y="192.5" width="12" height="9"/>
+              <rect x="191.5" y="228" width="6" height="12"/><circle cx="203.5" cy="234" r="6"/>
+              <path d="M241 216 H255 V243 H231 V226 Q231 216 241 216 Z" fill="none"/>
+              <path d="M255 216 H241 Q231 216 231 226 V243" stroke="rgba(248,247,244,.7)" stroke-width="1"/>
+              <circle cx="247" cy="233" r="2.6"/><path d="M247 228.4 v-1.8 M247 237.6 v1.8 M242.4 233 h-1.8 M251.6 233 h1.8" stroke-width=".8"/>
+              <path d="M252.5 221.5 h-9 M246 219.4 L243.5 221.5 l2.5 2.1" stroke-width=".9"/>
+            </g>
+          </g>
+          <!-- стена холла с дверями санузлов (уходит на Р5) -->
+          <g id="famWetDoors" class="fadeL">
+            <path d="M258 130 V138 M258 156 V198 M258 216 V246" stroke="#F8F7F4" stroke-width="1.6" fill="none"/>
+            <g fill="none" stroke="rgba(248,247,244,.55)" stroke-width="1.1">
+              <path d="M258 138 A18 18 0 0 1 276 156"/>
+              <path d="M258 198 A18 18 0 0 1 276 216"/>
+            </g>
+            <text x="288" y="215" font-family="'JetBrains Mono',monospace" font-size="11" fill="rgba(248,247,244,.6)" text-anchor="middle">7</text>
+          </g>
+          <!-- Р5 ПОСЛЕ: ванная + отдельная душевая на месте тупика -->
+          <g id="famWetC" class="fadeL rebuild" style="opacity:0">
+            <path d="M258 130 V210 M258 234 V246 M258 197 H286 M312 197 H318" stroke="#F8F7F4" stroke-width="1.6" fill="none"/>
+            <g fill="none" stroke="rgba(248,247,244,.55)" stroke-width="1.1">
+              <path d="M258 210 A24 24 0 0 1 282 234"/>
+              <path d="M286 197 A26 26 0 0 0 312 223"/>
+            </g>
+            <g stroke="rgba(248,247,244,.85)" stroke-width="1" fill="none">
+              <rect x="194" y="134" width="52" height="24" rx="9"/><rect x="198" y="138" width="44" height="16" rx="7"/>
+              <rect x="191.5" y="196" width="12" height="9"/>
+              <rect x="191.5" y="226" width="6" height="12"/><circle cx="203.5" cy="232" r="6"/>
+              <path d="M262 134 H286 V148 Q286 158 276 158 H262 Z" fill="none"/>
+              <path d="M286 134 V148 Q286 158 276 158 H262" stroke="rgba(248,247,244,.7)" stroke-width="1"/>
+              <circle cx="272" cy="143" r="2.6"/><path d="M272 138.4 v-1.8 M272 147.6 v1.8 M267.4 143 h-1.8 M276.6 143 h1.8" stroke-width=".8"/>
+              <path d="M264 153.5 h9 M270.4 151.4 L273 153.5 l-2.6 2.1" stroke-width=".9"/>
+              <rect x="310.5" y="138" width="6" height="12"/><circle cx="304.5" cy="144" r="6"/>
+              <rect x="262" y="166" width="12" height="9"/>
+            </g>
+            <g font-family="'JetBrains Mono',monospace" font-size="9" fill="rgba(248,247,244,.6)" text-anchor="middle">
+              <text x="222" y="218">ВАННАЯ</text>
+              <text x="298" y="188">ДУШ</text>
             </g>
           </g>
 
-          <!-- кухня ДО: всё в разных углах -->
+          <!-- Р2 ДО: кухня по разным углам -->
           <g id="famKitchOld" class="fadeL">
             <g fill="none" stroke="rgba(248,247,244,.7)" stroke-width="1">
               <rect x="197" y="62" width="16" height="16"/><circle cx="205" cy="70" r="4"/>
@@ -571,124 +623,96 @@ figure.photo-fig figcaption{font-family:var(--mono);font-size:11px;letter-spacin
               <rect x="296" y="60" width="16" height="16"/><path d="M296 60 l16 16"/>
             </g>
           </g>
-          <!-- кухня ПОСЛЕ: рабочий треугольник -->
+          <!-- Р2 ПОСЛЕ: рабочий треугольник (по макету) -->
           <g id="famKitchNew" class="fadeL rebuild" style="opacity:0">
-            <g fill="none" stroke="rgba(248,247,244,.7)" stroke-width="1">
-              <rect x="197" y="62" width="16" height="16"/><path d="M197 62 l16 16"/>
-              <rect x="219" y="64" width="14" height="12"/><path d="M219 70 h14"/>
-              <rect x="239" y="62" width="16" height="16"/><circle cx="247" cy="70" r="4"/>
+            <g fill="none" stroke="rgba(248,247,244,.85)" stroke-width="1">
+              <rect x="191.5" y="78" width="15" height="26"/>
+              <circle cx="196.5" cy="85" r="3"/><circle cx="202" cy="85" r="3"/><circle cx="196.5" cy="97" r="3"/><circle cx="202" cy="97" r="3"/>
+              <rect x="226" y="117.5" width="24" height="11"/><path d="M238 117.5 V128.5"/><circle cx="232" cy="123" r="2"/><circle cx="244" cy="123" r="2"/>
+              <rect x="258" y="117.5" width="14" height="11"/><path d="M258 121 h14"/>
             </g>
           </g>
 
-          <!-- гардеробная в комнате 2 -->
-          <g id="famWard" class="fadeL rebuild" style="opacity:0">
-            <path d="M318 296 H340 M366 296 H435" stroke="#F8F7F4" stroke-width="1.6" fill="none"/>
-            <path d="M340 296 A26 26 0 0 0 366 322" stroke="rgba(248,247,244,.55)" stroke-width="1.1" fill="none"/>
-            <rect x="322" y="250" width="109" height="16" fill="url(#hatch)" opacity=".55" stroke="rgba(248,247,244,.5)" stroke-width="1"/>
-            <rect x="322" y="266" width="14" height="26" fill="url(#hatch)" opacity=".4" stroke="rgba(248,247,244,.4)" stroke-width="1"/>
-            <text x="382" y="285" font-family="'JetBrains Mono',monospace" font-size="9" fill="rgba(248,247,244,.6)" text-anchor="middle">ГАРДЕРОБНАЯ</text>
-          </g>
-
-          <!-- тепловые зоны конфликтов -->
-          <circle id="heatWet" class="heat" cx="258" cy="158" r="46" fill="url(#heatR)"/>
-          <circle id="heatKitch" class="heat" cx="252" cy="92" r="52" fill="url(#heatR)"/>
-          <circle id="heatRm2" class="heat" cx="382" cy="290" r="52" fill="url(#heatR)"/>
-
-          <!-- жители -->
-          <g id="pA" class="person"><circle r="15" fill="url(#heatB)"/><circle r="4.5" fill="#C9A84C"/></g>
-          <g id="pB" class="person"><circle r="15" fill="url(#heatB)"/><circle r="4.5" fill="#F8F7F4"/></g>
-
-        </g>
-
-        <!-- ======= СЛОЙ: итоговое планировочное решение ======= -->
-        <g id="finalLayer" class="fadeL rebuild" style="display:none;opacity:0">
-          <g fill="none" stroke="#F8F7F4" stroke-width="1.6">
-            <path d="M190 130 H318"/>
-            <path d="M318 55 V64 M318 116 V130"/>
-            <path d="M258 130 V210 M258 234 V246"/>
-            <path d="M258 197 H286 M312 197 H318"/>
-            <path d="M318 130 V197"/>
-            <path d="M190 246 H270 M306 246 H435"/>
-            <path d="M190 325 H240 M266 325 H322 M348 325 H355"/>
-            <path d="M318 325 V443"/>
-            <path d="M355 246 V280 M355 306 V325"/>
-            <path d="M355 325 L376 364 M376 364 H435"/>
-          </g>
-          <g fill="none" stroke="rgba(248,247,244,.55)" stroke-width="1.1">
-            <path d="M318 64 A26 26 0 0 0 292 90"/>
-            <path d="M318 116 A26 26 0 0 1 292 90"/>
-            <path d="M258 210 A24 24 0 0 1 282 234"/>
-            <path d="M286 197 A26 26 0 0 0 312 223"/>
-            <path d="M266 325 A26 26 0 0 1 240 351"/>
-            <path d="M355 280 A26 26 0 0 1 381 306"/>
-            <path d="M322 325 A26 26 0 0 0 348 351"/>
-          </g>
-          <g fill="none" stroke="rgba(248,247,244,.7)" stroke-width="1">
-            <rect x="197" y="62" width="16" height="16"/><path d="M197 62 l16 16"/>
-            <rect x="219" y="64" width="14" height="12"/><path d="M219 70 h14"/>
-            <rect x="239" y="62" width="16" height="16"/><circle cx="247" cy="70" r="4"/>
-            <rect x="194" y="136" width="52" height="24" rx="9"/><rect x="198" y="140" width="44" height="16" rx="7"/>
-            <rect x="194" y="180" width="12" height="10"/>
-            <circle cx="204" cy="226" r="6"/><rect x="194" y="220" width="6" height="12"/>
-            <rect x="262" y="134" width="20" height="20"/><path d="M262 134 l20 20"/>
-            <rect x="298" y="134" width="12" height="10"/>
-            <circle cx="272" cy="178" r="6"/><rect x="262" y="172" width="6" height="12"/>
-          </g>
-          <g font-family="'JetBrains Mono',monospace" fill="rgba(248,247,244,.85)" text-anchor="middle">
-            <g font-size="13">
-              <text x="272" y="92">4</text><path d="M258 97 h28" stroke="rgba(248,247,244,.6)" stroke-width="1"/><text x="272" y="112">7.6</text>
-              <text x="376" y="140">3</text><path d="M358 145 h36" stroke="rgba(248,247,244,.6)" stroke-width="1"/><text x="376" y="160">19.4</text>
-              <text x="254" y="392">1</text>
+          <!-- Р3 ДО: двери кухни и гостиной через холл; глухая стена кухня—гостиная -->
+          <g id="famDoorOld" class="fadeL">
+            <path d="M318 64 V116 M318 197 V246" stroke="#F8F7F4" stroke-width="1.6" fill="none"/>
+            <g fill="none" stroke="rgba(248,247,244,.55)" stroke-width="1.1">
+              <path d="M280 130 A26 26 0 0 1 306 104"/>
+              <path d="M318 160 A26 26 0 0 1 344 186"/>
             </g>
-            <g font-size="9" fill="rgba(248,247,244,.6)">
-              <text x="222" y="214">ВАННАЯ</text>
-              <text x="292" y="174">ДУШ</text>
+          </g>
+          <!-- Р3 ПОСЛЕ: двойная стеклянная дверь кухня—гостиная, лишние двери заложены -->
+          <g id="famDoorNew" class="fadeL rebuild" style="opacity:0">
+            <path d="M280 130 H306 M318 160 V186" stroke="#F8F7F4" stroke-width="1.6" fill="none"/>
+            <g fill="none" stroke="rgba(248,247,244,.7)" stroke-width="1.1">
+              <path d="M318 64 H344"/><path d="M344 64 A26 26 0 0 1 318 90"/>
+              <path d="M318 116 H344"/><path d="M344 116 A26 26 0 0 0 318 90"/>
+            </g>
+          </g>
+
+          <!-- Р4 ДО: узкий коридор, стена спальни -->
+          <g id="famCorOld" class="fadeL">
+            <path d="M190 292 H240 M266 292 H318" stroke="#F8F7F4" stroke-width="1.6" fill="none"/>
+            <path d="M240 292 A26 26 0 0 0 266 318" stroke="rgba(248,247,244,.55)" stroke-width="1.1" fill="none"/>
+            <g font-family="'JetBrains Mono',monospace" font-size="13" fill="rgba(248,247,244,.85)" text-anchor="middle">
+              <text x="254" y="352">1</text><path d="M236 357 h36" stroke="rgba(248,247,244,.6)" stroke-width="1"/><text x="254" y="372">14.4</text>
+            </g>
+          </g>
+          <!-- Р4 ПОСЛЕ: стена сдвинута, коридор шире -->
+          <g id="famCorNew" class="fadeL rebuild" style="opacity:0">
+            <path d="M190 325 H240 M266 325 H318" stroke="#F8F7F4" stroke-width="1.6" fill="none"/>
+            <path d="M266 325 A26 26 0 0 1 240 351" stroke="rgba(248,247,244,.55)" stroke-width="1.1" fill="none"/>
+            <text x="254" y="392" font-family="'JetBrains Mono',monospace" font-size="13" fill="rgba(248,247,244,.85)" text-anchor="middle">1</text>
+          </g>
+
+          <!-- Р6 ДО: комната 2 целиком -->
+          <g id="famRoomOld" class="fadeL">
+            <path d="M318 246 V300 M318 326 V443" stroke="#F8F7F4" stroke-width="1.6" fill="none"/>
+            <path d="M318 300 A26 26 0 0 1 344 326" stroke="rgba(248,247,244,.55)" stroke-width="1.1" fill="none"/>
+            <g font-family="'JetBrains Mono',monospace" font-size="13" fill="rgba(248,247,244,.85)" text-anchor="middle">
+              <text x="392" y="352">2</text><path d="M374 357 h36" stroke="rgba(248,247,244,.6)" stroke-width="1"/><text x="392" y="372">19.0</text>
+            </g>
+          </g>
+          <!-- Р6 ПОСЛЕ: две детские -->
+          <g id="famRoomNew" class="fadeL rebuild" style="opacity:0">
+            <path d="M318 325 V443 M355 246 V280 M355 306 V325 M318 325 H322 M348 325 H355" stroke="#F8F7F4" stroke-width="1.6" fill="none"/>
+            <path d="M355 325 L376 364 M376 364 H435" stroke="#F8F7F4" stroke-width="1.6" fill="none"/>
+            <g fill="none" stroke="rgba(248,247,244,.55)" stroke-width="1.1">
+              <path d="M355 280 A26 26 0 0 1 381 306"/>
+              <path d="M322 325 A26 26 0 0 0 348 351"/>
+            </g>
+            <g font-family="'JetBrains Mono',monospace" font-size="9" fill="rgba(248,247,244,.6)" text-anchor="middle">
               <text x="396" y="292">ДЕТСКАЯ 1</text>
               <text x="378" y="410">ДЕТСКАЯ 2</text>
-              <text x="230" y="292" font-size="11">8</text>
             </g>
           </g>
+
+          <!-- тепловой след (шлейф) конфликта -->
+          <g id="trailG"></g>
+          <!-- тепловые зоны конфликтов -->
+          <circle id="heatWet" class="heat" cx="262" cy="168" r="46" fill="url(#heatR)"/>
+          <circle id="heatKitch" class="heat" cx="252" cy="92" r="52" fill="url(#heatR)"/>
+          <circle id="heatHall" class="heat" cx="302" cy="172" r="46" fill="url(#heatR)"/>
+          <circle id="heatCor" class="heat" cx="254" cy="270" r="52" fill="url(#heatR)"/>
+          <circle id="heatDead" class="heat" cx="288" cy="166" r="40" fill="url(#heatR)"/>
+          <circle id="heatRm2" class="heat" cx="376" cy="150" r="56" fill="url(#heatR)"/>
+
+          <!-- жильцы, гости, дети -->
+          <g id="pA" class="person"><circle r="15" fill="url(#heatB)"/><circle r="4.5" fill="#C9A84C"/></g>
+          <g id="pB" class="person"><circle r="15" fill="url(#heatB)"/><circle r="4.5" fill="#F8F7F4"/></g>
+          <g id="g1" class="person"><circle r="10" fill="url(#heatB)"/><circle r="3.6" fill="#9FB4D8"/></g>
+          <g id="g2" class="person"><circle r="10" fill="url(#heatB)"/><circle r="3.6" fill="#9FB4D8"/></g>
+          <g id="g3" class="person"><circle r="10" fill="url(#heatB)"/><circle r="3.6" fill="#9FB4D8"/></g>
+          <g id="g4" class="person"><circle r="10" fill="url(#heatB)"/><circle r="3.6" fill="#9FB4D8"/></g>
+          <g id="k1" class="person"><circle r="7.5" fill="url(#heatB)"/><circle r="2.25" fill="#C9A84C"/></g>
+          <g id="k2" class="person"><circle r="7.5" fill="url(#heatB)"/><circle r="2.25" fill="#F8F7F4"/></g>
         </g>
         </g></g>
-        <!-- часы и комментарий (поверх зума) -->
-        <g id="famBand" style="display:none" font-family="'JetBrains Mono',monospace">
-          <rect x="190" y="20" width="245" height="24" fill="#16213E" stroke="rgba(248,247,244,.3)" stroke-width="1"/>
-          <text id="famClock" x="202" y="37" font-size="13" fill="#F8F7F4">07:00</text>
-          <path d="M246 24 V40" stroke="rgba(248,247,244,.25)" stroke-width="1"/>
-          <text id="famNote" x="340" y="36" font-size="9" fill="rgba(248,247,244,.75)" text-anchor="middle">оба проснулись — комната 1</text>
-        </g>
-        <!-- ======= ЭКСПЛИКАЦИЯ ======= -->
-        <g class="tag-pop" style="animation-delay:1.6s">
-          <rect x="60" y="490" width="440" height="118" fill="none" stroke="rgba(248,247,244,.3)" stroke-width="1"/>
-          <path d="M60 514 H500" stroke="rgba(248,247,244,.3)" stroke-width="1"/>
-          <path d="M280 514 V608" stroke="rgba(248,247,244,.15)" stroke-width="1"/>
-          <g font-family="'JetBrains Mono',monospace" font-size="11" letter-spacing="2" fill="rgba(248,247,244,.8)">
-            <text x="280" y="506" text-anchor="middle">ЭКСПЛИКАЦИЯ ПОМЕЩЕНИЙ</text>
-          </g>
-          <g font-family="'JetBrains Mono',monospace" font-size="11" fill="rgba(248,247,244,.6)">
-            <text x="74" y="533">1 · ЖИЛАЯ</text><text x="266" y="533" text-anchor="end">14.4</text>
-            <text x="74" y="555">2 · ЖИЛАЯ</text><text x="266" y="555" text-anchor="end">19.0</text>
-            <text x="74" y="577">3 · ЖИЛАЯ</text><text x="266" y="577" text-anchor="end">19.4</text>
-            <text x="74" y="599">4 · КУХНЯ</text><text x="266" y="599" text-anchor="end">7.6</text>
-            <text x="294" y="533">5 · ТУАЛЕТ</text>
-            <text x="294" y="555">6 · ВАННАЯ</text>
-            <text x="294" y="577">7 · ХОЛЛ</text>
-            <text x="294" y="599">8 · КОРИДОР</text>
-            <text x="486" y="533" text-anchor="end">М 1:100</text>
-            <text x="486" y="599" text-anchor="end">ЭТ. 1А·176</text>
-          </g>
-        </g>
-        <!-- штамп -->
-        <g class="tag-pop" style="animation-delay:1.9s" font-family="'JetBrains Mono',monospace" fill="rgba(248,247,244,.45)">
-          <text x="60" y="630" font-size="10" letter-spacing="2">REDESIGN · ОБМЕРНЫЙ ПЛАН БТИ</text>
-        </g>
       </svg>
-      <div class="plan-toggle" id="planToggle">
-        <button type="button" class="active" data-view="std">Стандартная квартира в сталинке</button>
-        <button type="button" data-view="family">Для семьи</button>
-        <button type="button" data-view="final">Итог</button>
+          <div class="pw-caption" id="planCaption">рис. 01 — обмерный план БТИ · сталинка</div>
+        </div>
       </div>
-      <div class="plan-caption" id="planCaption">рис. 01 — обмерный план БТИ · сталинка</div>
+      <div class="pw-scale" id="pwScale"></div>
     </div>
   </div>
 </section>
@@ -699,24 +723,24 @@ figure.photo-fig figcaption{font-family:var(--mono);font-size:11px;letter-spacin
     <div class="reveal">
       <div class="kicker">01 · Подход</div>
       <h2 class="section-title">Эргономика пространства — это не про красоту</h2>
-      <p class="section-lead">Эргономика — это наука о том, как среда поддерживает или мешает человеку. В автомобиле это руль на правильной высоте. В интерьере — это дом, где всё «под рукой» не потому, что вы к нему привыкли, а потому что он спроектирован под вас.</p>
+      <p class="section-lead">Задача красивого интерьера — впечатлить гостей. Удобный вы чувствуете иначе — спиной, локтями, руками. Эргономика про то, работает пространство на вас или против: розетка там, где стоит зарядка, а не где так вышло у застройщика; столешница под ваш рост, а не под средний. Разница простая: к плохому пространству привыкают, а хорошего просто не замечают — оно не мешает.</p>
       <p class="quote-band">Мы не проектируем стены. Мы проектируем вашу жизнь в этих стенах.</p>
     </div>
     <div class="cards3">
       <div class="p-card reveal">
         <span class="num">ПРИНЦИП / 01</span>
-        <h3>Функционал прежде формы</h3>
-        <p>Красивое, но неудобное — это плохое проектирование. Мы начинаем с функции: что здесь будет происходить, и только потом думаем, как это выглядит.</p>
+        <h3>Сперва функционал, затем форма</h3>
+        <p>Красивая, но неудобная кухня — это не «дизайн с характером», это ошибка. Раковина в трёх шагах от плиты, розеток не хватает ровно там, где стоит чайник, — за это платят каждый день, а не один раз при монтаже.</p>
       </div>
       <div class="p-card reveal">
         <span class="num">ПРИНЦИП / 02</span>
         <h3>Сценарий важнее метража</h3>
-        <p>Маленький дом может работать превосходно. Большой — быть неудобным. Всё зависит от того, насколько пространство соответствует жизненным сценариям семьи.</p>
+        <p>Маленький дом может работать превосходно, а большой — оставаться просто большим и неудобным. Дело не в квадратах, а в том, совпадает ли планировка с тем, как семья на самом деле живёт: где бросают ключи на входе, помещаются ли все на кухне утром, есть ли куда уйти, когда пришли гости, а хочется тишины.</p>
       </div>
       <div class="p-card reveal">
         <span class="num">ПРИНЦИП / 03</span>
-        <h3>Пространство существует во&nbsp;времени</h3>
-        <p>Дом используется по-разному утром, днём и вечером. Хорошая планировка учитывает суточные ритмы и сезонные изменения.</p>
+        <h3>Пространство живёт во&nbsp;времени</h3>
+        <p>Один и тот же дом утром и вечером — почти два разных дома. Утром он про свет, кофе и спешку: всем в душ, никто не сталкивается в коридоре. Вечером — приглушить верхний свет и не видеть кухню из кресла. Да и от июля к январю меняется: где летом тянет сквозняком, зимой садятся с пледом. Хорошая планировка закладывает это заранее.</p>
       </div>
     </div>
   </div>
@@ -736,20 +760,20 @@ figure.photo-fig figcaption{font-family:var(--mono);font-size:11px;letter-spacin
     <div class="layers reveal">
       <div class="layer">
         <span class="mono-label">Слой 01</span>
-        <h3>Сценарии жизни</h3>
-        <p>Описание типичного дня, недели, года клиента в доме. Кто живёт, как работают, как отдыхают, как общаются.</p>
+        <h3>Сценарии</h3>
+        <p>Как проходит ваш обычный день, неделя, год в этом доме: кто во сколько встаёт, где работает, куда уходит побыть одному, что происходит, когда все собираются вместе.</p>
         <span class="say">Прежде чем рисовать стены, мы описываем вашу жизнь</span>
       </div>
       <div class="layer">
         <span class="mono-label">Слой 02</span>
-        <h3>Функционал жизни</h3>
-        <p>Конкретные действия и нужды: где готовить завтрак на двух детей, где принять 20 гостей, где работать без шума из гостиной.</p>
+        <h3>Функционал</h3>
+        <p>Конкретные действия и их места: где готовить завтрак на двух детей, где рассадить двадцать гостей, где работать, не слыша гостиную.</p>
         <span class="say">Каждый квадратный метр должен знать, зачем он существует</span>
       </div>
       <div class="layer">
         <span class="mono-label">Слой 03</span>
-        <h3>Эргономика пространства</h3>
-        <p>Пространственные решения, которые поддерживают эти сценарии: расстояния, маршруты, высоты, пропорции, свет.</p>
+        <h3>Эргономика</h3>
+        <p>Решения, которые заставляют пространство работать за вас: сколько шагов от плиты до раковины, на какой высоте полка под руку, куда падает утренний свет и где он мешает вечером.</p>
         <span class="say">Дом, который работает — без усилий с вашей стороны</span>
       </div>
     </div>
@@ -1134,14 +1158,19 @@ btnNext.addEventListener('click',()=>{
 });
 show(0);
 
-/* переключатель плана + сценарный тест «для семьи» */
+/* виджет плана: диалог слева + шкала принятия решений снизу */
 const $id=i=>document.getElementById(i);
-const pvBtns=[...document.querySelectorAll('#planToggle button')];
-const stdLayer=$id('stdLayer'),famLayer=$id('familyLayer'),planCap=$id('planCaption'),famBand=$id('famBand'),zoomG=$id('zoomG');
-let famT=[];
-const famClear=()=>{famT.forEach(clearTimeout);famT=[];const a=document.getElementById('pA'),b=document.getElementById('pB');if(a)cancelAnimationFrame(a._raf);if(b)cancelAnimationFrame(b._raf)};
-const fat=(ms,fn)=>famT.push(setTimeout(fn,ms));
+const stdLayer=$id('stdLayer'),famLayer=$id('familyLayer'),planCap=$id('planCaption'),zoomG=$id('zoomG'),dlgEl=$id('dlg'),scaleEl=$id('pwScale');
+const PEOPLE=['pA','pB','g1','g2','g3','g4','k1','k2'];
+const HEATS=['heatWet','heatKitch','heatHall','heatCor','heatDead','heatRm2'];
+let animT=[],flowT=[];
+const at=(ms,fn)=>animT.push(setTimeout(fn,ms));
+const ft=(ms,fn)=>flowT.push(setTimeout(fn,ms));
+const stopRaf=()=>PEOPLE.forEach(i=>{const el=$id(i);if(el)cancelAnimationFrame(el._raf)});
+const clearAnim=()=>{animT.forEach(clearTimeout);animT=[];stopRaf();trailStop()};
+const clearFlow=()=>{flowT.forEach(clearTimeout);flowT=[]};
 const mv=(el,x,y)=>el.style.transform='translate('+x+'px,'+y+'px)';
+const put=(id,x,y)=>{const el=$id(id);mv(el,x,y);el.style.opacity=1;return el};
 /* движение по маршруту (через дверные проёмы), а не сквозь стены */
 function walk(el,pts,dur){
   cancelAnimationFrame(el._raf);
@@ -1160,106 +1189,249 @@ function walk(el,pts,dur){
 }
 const zoomTo=(cx,cy,s=2)=>zoomG.style.transform='translate('+(cx-s*cx)+'px,'+(cy-s*cy)+'px) scale('+s+')';
 const zoomOut=()=>zoomG.style.transform='none';
+
+/* тепловой след конфликта: пока активен — сыплет затухающие красные пятна по текущей позиции человека */
+const trailG=$id('trailG');const SVGNS='http://www.w3.org/2000/svg';
+let trailIv=null;
+function trailStart(el){
+  trailStop();
+  const spawn=()=>{
+    const m=/translate\(\s*([-\d.]+)px[, ]+([-\d.]+)px/.exec(el.style.transform||'');
+    if(!m)return;
+    const c=document.createElementNS(SVGNS,'circle');
+    c.setAttribute('cx',m[1]);c.setAttribute('cy',m[2]);c.setAttribute('r','15');
+    c.setAttribute('fill','url(#heatR)');c.setAttribute('class','trailDot');
+    trailG.appendChild(c);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>c.classList.add('fade')));
+    setTimeout(()=>c.remove(),3000);
+  };
+  trailIv=setInterval(spawn,100);
+}
+function trailStop(){if(trailIv){clearInterval(trailIv);trailIv=null}}
+function trailClear(){trailStop();if(trailG)trailG.innerHTML=''}
+
+/* реплики диалога */
+const dlgClear=()=>{dlgEl.innerHTML=''};
+function dlgAdd(kind,who,text){
+  const d=document.createElement('div');d.className='b '+kind;
+  d.innerHTML=(who?'<span class="who">'+who+'</span>':'')+'<p>'+text+'</p>';
+  dlgEl.appendChild(d);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>d.classList.add('show')));
+}
+const sayClient=(t,who='Жильцы')=>dlgAdd('client',who,t);
+const sayDesigner=t=>dlgAdd('designer','ReDesign',t);
+const sayNote=t=>{};   /* ремарки-подписи отключены (Влад, 2026-07-20) — остаются только именованные реплики Жилец ↔ ReDesign */
+const heatOn=i=>$id(i).classList.add('on');
+const heatOff=i=>$id(i).classList.remove('on');
+const solve=(oldId,newId)=>{if(oldId)$id(oldId).style.opacity=0;const el=$id(newId);el.style.opacity=1;el.classList.add('go')};
+
+/* ======= шаги-решения (строки таблицы Влада) ======= */
+const STEPS=[
+  {label:'Санузел',caption:'рис. 02 — решение 1: два санузла с душевыми',dur:14400,
+   play(){
+     const pA=$id('pA'),pB=$id('pB');
+     sayClient('По утрам мы всегда конфликтовали, вернее даже с вечера: «кто встанет первым», туалет-то, извините, один.','Мария');
+     at(700,()=>{put('pA',235,385);put('pB',262,402)});
+     at(1500,()=>{sayNote('утро: один занимает туалет, второй идёт следом');zoomTo(252,176,1.7);
+       walk(pA,[[235,385],[253,330],[254,300],[255,285],[285,258],[288,240],[286,190],[270,150],[248,149],[212,150]],2400);
+       walk(pB,[[262,402],[254,330],[255,300],[256,285],[286,258],[288,240],[288,186]],2400)});
+     at(4200,()=>{sayNote('он заперся в туалете — она нетерпеливо ходит по коридору');trailStart(pB);
+       walk(pB,[[288,186],[288,232],[286,150],[290,224],[288,166],[289,230],[287,175]],5400)});
+     at(9600,()=>{trailStop();$id('famWetOld').style.opacity=0});
+     at(10200,()=>{sayDesigner('Если убрать ванную, то, если приподнять пол для стока, можно сделать две одинаковые душевые с небольшими санузлами.');
+       solve(null,'famWetNew');walk(pA,[[212,150],[236,170]],700)});
+     at(11400,()=>walk(pB,[[287,175],[288,208],[270,210],[248,211],[236,227]],1700));
+     at(13000,()=>sayNote('оба собираются одновременно — конфликт исчез'));
+     at(13800,()=>zoomOut());
+   }},
+  {label:'Кухня',caption:'рис. 03 — решение 2: рабочий треугольник',dur:13500,
+   play(){
+     const pA=$id('pA');
+     sayClient('На кухне не готовка, а беготня какая-то.','Николай');
+     at(600,()=>put('pA',222,84));
+     at(1300,()=>{sayNote('готовка: плита → раковина → холодильник, и так весь вечер');zoomTo(250,78,1.7);trailStart(pA)});
+     at(1600,()=>walk(pA,[[222,84],[222,110]],700));            // перед плитой → перед раковиной
+     at(2500,()=>walk(pA,[[222,110],[290,86]],900));            // → перед холодильником
+     at(3600,()=>walk(pA,[[290,86],[222,110],[222,84]],1400));  // назад через раковину к плите
+     at(5200,()=>walk(pA,[[222,84],[222,110],[290,86]],1400));  // и снова круг
+     at(7000,()=>{trailStop();$id('famKitchOld').style.opacity=0});
+     at(7800,()=>{sayDesigner('Достаточно организовать рабочий треугольник: 1,2–2 метра до каждой из вершин: холодильник, раковина и плита. Кстати, кто чаще на кухне? Надо поднять рабочую поверхность, чтобы не сутулиться.');
+       solve(null,'famKitchNew');walk(pA,[[290,86],[224,94]],900)});
+     at(9500,()=>walk(pA,[[224,94],[236,110]],600));            // шаг к раковине (перед ней)
+     at(10400,()=>walk(pA,[[236,110],[262,110],[224,96]],900)); // к холодильнику и назад к плите
+     at(11500,()=>sayNote('всё под рукой — километры отменяются'));
+     at(12600,()=>zoomOut());
+   }},
+  {label:'Гостиная',caption:'рис. 04 — решение 3: стеклянная дверь кухня–гостиная',dur:23600,
+   play(){
+     const pA=$id('pA'),pB=$id('pB'),G=['g1','g2','g3','g4'];
+     const GC=[[218,268],[238,272],[224,283],[244,281]];   // толпа гостей в коридоре
+     const K2L=[[224,96],[268,102],[293,118],[293,150],[300,175],[315,172],[335,172],[364,148]];  // кухня→холл→гостиная (через 2 двери)
+     const L2K=[[364,148],[335,172],[315,172],[300,175],[293,150],[293,118],[268,102],[224,96]];  // обратно
+     sayClient('Мы любим принимать гостей, хороший дом — гостеприимный дом. Но тот, кто готовит, — редкий гость в своём же доме.','Николай');
+     at(500,()=>{put('pA',224,96);put('pB',384,150)});
+     at(1300,()=>{sayNote('звонок в дверь — гости пришли');G.forEach(g=>put(g,172,273))});
+     at(2000,()=>{sayNote('муж и жена выбегают встречать в коридор');
+       walk(pA,[[224,96],[268,102],[293,118],[293,150],[290,210],[288,240],[288,255],[250,266]],2200);
+       walk(pB,[[384,150],[348,166],[330,172],[310,172],[295,205],[288,240],[288,255],[262,270]],2200)});
+     at(3400,()=>G.forEach((g,i)=>at(i*350,()=>walk($id(g),[[172,273],[205,273],[220,271],GC[i]],1600))));
+     at(5200,()=>sayNote('встретились в коридоре — тесно, но радостно'));
+     at(6400,()=>{sayNote('жена ведёт гостей в гостиную, муж — обратно на кухню');
+       walk(pB,[[262,270],[288,255],[288,240],[295,205],[310,172],[332,172],[382,150]],2500);
+       G.forEach((g,i)=>at(300+i*360,()=>walk($id(g),[GC[i],[288,255],[288,240],[300,200],[315,172],[336,172],[356+(i%2)*40,112+Math.floor(i/2)*46]],2700)));
+       walk(pA,[[250,266],[288,255],[288,240],[290,190],[293,150],[293,118],[240,100],[224,96]],2400)});
+     at(9400,()=>{sayNote('муж носит блюда: кухня → холл → гостиная — два конца через две двери');zoomTo(286,138,1.5);trailStart($id('pA'));
+       walk(pA,K2L,1900)});
+     at(11400,()=>walk(pA,L2K,1900));
+     at(13400,()=>{sayNote('и снова круг — блюда стынут по дороге');walk(pA,K2L,1900)});
+     at(15400,()=>walk(pA,L2K,1900));
+     at(17500,()=>{trailStop();$id('famDoorOld').style.opacity=0});
+     at(18300,()=>{sayDesigner('Очень разумно будет перенести дверь из коридора в гостиную.');
+       solve(null,'famDoorNew')});
+     at(19700,()=>{sayNote('к гостям — через одну дверь, блюда горячие');
+       walk(pA,[[224,96],[290,92],[312,98],[335,104],[368,140]],1500)});
+     at(21300,()=>walk(pA,[[368,140],[335,104],[312,98],[280,92],[224,96]],1500));
+     at(23000,()=>zoomOut());
+   }},
+  {label:'Коридор',caption:'рис. 05 — решение 4: коридор, в котором можно разойтись',dur:14200,
+   play(){
+     // все шестеро в узком коридоре (y246–292), никто не в спальне
+     const P0={pA:[212,258],pB:[244,260],g1:[204,276],g2:[230,278],g3:[262,268],g4:[288,280]};
+     const ids=Object.keys(P0);
+     sayClient('Стандартный коридор в сталинке — очень узкий. Ни пальто повесить, ни столик поставить.','Мария');
+     at(500,()=>ids.forEach(id=>put(id,P0[id][0],P0[id][1])));
+     at(1300,()=>{sayNote('гости уходят, хозяева провожают — вшестером в 176 см не развернуться');zoomTo(250,270,1.85)});
+     // каждый топчется по своему случайному пути — вразнобой, не хороводом
+     at(1600,()=>ids.forEach((id,i)=>{
+       const p=P0[id],rnd=(a)=>(Math.random()*2-1)*a,legs=[[p[0],p[1]]];
+       for(let k=0;k<5;k++)legs.push([p[0]+rnd(7),p[1]+rnd(6)]);
+       legs.push([p[0],p[1]]);
+       at(Math.floor(i*120+Math.random()*260),()=>walk($id(id),legs,3600+Math.floor(Math.random()*1000)));
+     }));
+     at(5600,()=>{$id('famCorOld').style.opacity=0});
+     at(6400,()=>{sayDesigner('Если уменьшить вашу спальную комнату, станет лишь уютнее.');
+       solve(null,'famCorNew')});
+     at(8000,()=>{sayNote('хозяева провожают гостей до двери — и всем хватает места');
+       ['g1','g2','g3','g4'].forEach((g,i)=>at(i*300,()=>walk($id(g),[[P0[g][0],P0[g][1]],[214,272],[198,273],[184,273],[172,273]],2500)));
+       at(500,()=>walk($id('pA'),[[P0.pA[0],P0.pA[1]],[210,270],[200,274]],2000));
+       at(800,()=>walk($id('pB'),[[P0.pB[0],P0.pB[1]],[220,272],[208,275]],2000))});
+     at(11200,()=>['g1','g2','g3','g4'].forEach((g,i)=>at(i*180,()=>$id(g).style.opacity=0)));
+     at(12000,()=>sayNote('дверь закрыта — тишина и простор'));
+     at(12800,()=>zoomOut());
+   }},
+  {label:'Ванная',caption:'рис. 06 — решение 5: ванная возвращается',dur:13400,
+   play(){
+     const pA=$id('pA'),pB=$id('pB');
+     sayDesigner('Кстати, над коридором мы можем разместить ванную, это законно!');
+     at(1000,()=>{sayNote('после перестройки дверей холл стал тупиком — мёртвая зона');heatOn('heatDead');zoomTo(282,172,1.9)});
+     at(4400,()=>{heatOff('heatDead');$id('famWetDoors').style.opacity=0;$id('famWetNew').style.opacity=0});
+     at(5200,()=>{sayDesigner('Присоединяем тупик к мокрой зоне: слева — полноценная ванная, справа — отдельная душевая.');
+       solve(null,'famWetC')});
+     at(7200,()=>{put('pA',236,300);walk(pA,[[236,300],[288,262],[288,230],[270,222],[240,206],[222,170]],1900)});
+     at(7800,()=>{put('pB',300,300);walk(pB,[[300,300],[288,262],[288,235],[298,212],[300,176],[292,150]],1900)});
+     at(10200,()=>sayNote('ванна — для неспешных вечеров, душ — для утренней очереди'));
+     at(12400,()=>zoomOut());
+   }},
+  {label:'Детские',caption:'рис. 07 — решение 6: две детские вместо одной комнаты',dur:14400,
+   play(){
+     const k1=$id('k1'),k2=$id('k2');
+     sayClient('Ура! У нас будут дети! Мальчик и девочка! А как бы нам их лучше разместить? Переделать гостиную во вторую детскую?','Мария');
+     at(900,()=>{sayNote('двое новых жильцов — где их поселить?');
+       put('k1',376,120);put('k2',378,412);heatOn('heatRm2');zoomTo(376,220,1.5)});
+     at(4400,()=>{heatOff('heatRm2');$id('famRoomOld').style.opacity=0});
+     at(5200,()=>{sayDesigner('Нет, в первой детской у вас два окна, можно сделать небольшие, но очень уютные две детские комнаты.');
+       solve(null,'famRoomNew')});
+     at(7400,()=>{sayNote('каждому — своя комната');
+       walk(k1,[[376,120],[350,182],[330,222],[300,242],[290,268],[320,292],[345,293],[382,286],[396,302]],2800);
+       walk(k2,[[378,412],[398,400],[392,392]],1200)});
+     at(11400,()=>sayNote('дом растёт вместе с семьёй'));
+     at(13400,()=>zoomOut());
+   }}
+];
+const N=STEPS.length;
+const capFinal='рис. '+String(N+2).padStart(2,'0')+' — итоговое планировочное решение';
+
+/* видимость групп «на начало шага s» (решения < s применены) */
+function applyState(s){
+  const V=(id,on)=>{const el=$id(id);el.style.opacity=on?1:0;if(el.classList.contains('rebuild'))el.classList.toggle('go',on)};
+  V('famWetOld',s<=1);V('famWetNew',s>=2&&s<=5);V('famWetDoors',s<=5);V('famWetC',s>=6);
+  V('famKitchOld',s<=2);V('famKitchNew',s>=3);
+  V('famDoorOld',s<=3);V('famDoorNew',s>=4);
+  V('famCorOld',s<=4);V('famCorNew',s>=5);
+  V('famRoomOld',s<=6);V('famRoomNew',s>=7);
+}
 function famReset(){
-  zoomOut();
-  ['famWetOld','famKitchOld'].forEach(i=>$id(i).style.opacity=1);
-  ['famWetNew','famKitchNew','famWard'].forEach(i=>{const el=$id(i);el.style.opacity=0;el.classList.remove('go')});
-  ['heatWet','heatKitch','heatRm2'].forEach(i=>$id(i).classList.remove('on'));
-  const pA=$id('pA'),pB=$id('pB');
-  cancelAnimationFrame(pA._raf);cancelAnimationFrame(pB._raf);
-  pA.style.opacity=0;pB.style.opacity=0;
-  mv(pA,235,385);mv(pB,262,402);
-  const fl=$id('finalLayer');fl.style.display='none';fl.style.opacity=0;fl.classList.remove('go');
-  $id('famClock').textContent='07:00';
-  $id('famNote').textContent='оба проснулись — комната 1';
+  zoomOut();stopRaf();trailClear();
+  HEATS.forEach(i=>$id(i).classList.remove('on'));
+  // мгновенно прячем (без плавного затухания), затем перемещаем — иначе мелькают в спальне
+  PEOPLE.forEach(i=>{const el=$id(i);el.style.transition='none';el.style.opacity=0});
+  mv($id('pA'),235,385);mv($id('pB'),262,402);
+  void trailG.getBoundingClientRect();
+  PEOPLE.forEach(i=>{$id(i).style.transition=''});
 }
-function famPlay(){
-  famClear();famReset();
-  const pA=$id('pA'),pB=$id('pB');
-  const say=(t,n)=>{$id('famClock').textContent=t;$id('famNote').textContent=n};
-  const rebuild=(oldId,newId)=>{$id(oldId).style.opacity=0;const el=$id(newId);el.style.opacity=1;el.classList.add('go')};
-  fat(500,()=>{pA.style.opacity=1;pB.style.opacity=1});
-  /* через дверь комнаты 1 → коридор 8 → проём в холл 7 → дверь туалета */
-  fat(1600,()=>{say('07:05','первый занял туалет');
-    walk(pA,[[235,385],[253,310],[253,285],[285,250],[288,210],[262,150],[218,148]],2200);
-    walk(pB,[[262,402],[253,330],[253,296],[280,255],[288,246],[288,190],[272,152]],2200)});
-  fat(4200,()=>{say('07:10','второй ждёт у двери — конфликт');$id('heatWet').classList.add('on');zoomTo(224,188)});
-  fat(7400,()=>{say('07:18','переустраиваем санузел');$id('heatWet').classList.remove('on');$id('famWetOld').style.opacity=0});
-  fat(8500,()=>{say('07:20','два узла: душ + туалет каждому');rebuild('famWetOld','famWetNew');
-    walk(pA,[[218,148],[222,160]],600)});
-  fat(10300,()=>walk(pB,[[272,152],[276,207],[242,212],[224,220]],1600));
-  fat(11500,()=>say('07:30','оба собираются одновременно'));
-  fat(12900,()=>zoomOut());
-  /* пЕрвый: дверь санузла → холл → дверь кухни; второй: дверь санузла → проём → дверь комнаты 2 */
-  fat(14400,()=>{say('08:00','утро: кухня и сборы');
-    walk(pA,[[222,160],[226,148],[262,147],[288,150],[293,132],[285,110],[252,92]],2200);
-    walk(pB,[[224,220],[230,209],[262,208],[285,228],[288,255],[300,285],[318,312],[350,305],[382,300]],2600)});
-  fat(15800,()=>{say('08:05','кухня: всё в разных углах');$id('heatKitch').classList.add('on');zoomTo(254,95);walk(pA,[[252,92],[300,70]],700)});
-  fat(16700,()=>walk(pA,[[300,70],[205,102]],800));
-  fat(17600,()=>walk(pA,[[205,102],[298,72]],800));
-  fat(18700,()=>{say('08:30','кухня: рабочий треугольник');$id('heatKitch').classList.remove('on');rebuild('famKitchOld','famKitchNew');walk(pA,[[298,72],[226,92]],900)});
-  fat(20400,()=>zoomOut());
-  fat(21400,()=>{say('09:00','комната 2: негде хранить вещи');$id('heatRm2').classList.add('on');zoomTo(376,290);walk(pB,[[382,300],[390,322]],800)});
-  fat(23600,()=>{say('09:30','гардеробная — отдельная комната');$id('heatRm2').classList.remove('on');rebuild('famWard','famWard');
-    walk(pB,[[390,322],[353,308],[353,282],[376,268]],1600)});
-  fat(25400,()=>zoomOut());
-  fat(26400,()=>say('10:00','дом работает на семью'));
-  fat(28600,()=>{say('10:00','…а дальше были ещё десятки решений');pA.style.opacity=0;pB.style.opacity=0});
-  fat(30400,()=>{famLayer.style.display='none';finalShow();
-    pvBtns.forEach(x=>x.classList.remove('active'));
-    const fb=pvBtns.find(b=>b.dataset.view==='final');if(fb)fb.classList.add('active');
-    planCap.textContent='рис. 03 — итоговое планировочное решение';});
-  /* авто-повтор: через ~3 с после «Итога» запускаем заново, пока план виден и пользователь не вмешался */
-  fat(33600,()=>{ if(autoMode&&planInView){startFamilyAuto();} else {looping=false;} });
+
+/* шкала принятия решений */
+function buildScale(){
+  const labels=['Обмер БТИ',...STEPS.map(s=>s.label),'Итог'];
+  scaleEl.innerHTML='<div class="pw-track"><div class="pw-fill" id="pwFill"></div>'+
+    labels.map((l,i)=>{
+      const p=(i/(labels.length-1)*100).toFixed(2);
+      const edge=i===0?' data-edge="l"':(i===labels.length-1?' data-edge="r"':'');
+      return '<button type="button" class="pw-pt" style="left:'+p+'%"'+edge+' data-i="'+i+'" aria-label="'+l+'"><span class="dot"></span><span class="lbl">'+l+'</span></button>';
+    }).join('')+'</div>';
+  [...scaleEl.querySelectorAll('.pw-pt')].forEach(b=>b.addEventListener('click',()=>{
+    autoMode=false;looping=false;clearFlow();goState(+b.dataset.i);
+  }));
 }
-function finalShow(){
-  const fl=$id('finalLayer');fl.style.display='';void fl.getBoundingClientRect();
-  fl.style.opacity=1;fl.classList.add('go');
-  famBand.style.display='';
-  $id('famClock').textContent='ИТОГ';
-  $id('famNote').textContent='финальный план — после всех решений';
+function setScale(i){
+  [...scaleEl.querySelectorAll('.pw-pt')].forEach(p=>{const k=+p.dataset.i;p.classList.toggle('active',k===i);p.classList.toggle('done',k<i)});
+  const f=$id('pwFill');if(f)f.style.width=(i/(N+1)*100)+'%';
 }
-/* флаги авто-режима */
+
+/* состояния: 0 — обмер БТИ, 1..N — шаги-решения, N+1 — итог */
+function goState(i){
+  clearAnim();famReset();dlgClear();setScale(i);
+  if(i===0){
+    famLayer.style.display='none';stdLayer.style.display='';
+    planCap.textContent='рис. 01 — обмерный план БТИ · сталинка';
+    sayNote('точка отсчёта — обмерный план БТИ, сталинка');
+  }else if(i<=N){
+    stdLayer.style.display='none';famLayer.style.display='';
+    applyState(i);
+    planCap.textContent=STEPS[i-1].caption;
+    STEPS[i-1].play();
+  }else{
+    stdLayer.style.display='none';famLayer.style.display='';
+    applyState(N+1);
+    planCap.textContent=capFinal;
+    sayNote('шесть решений спустя');
+    sayNote('итог: дом работает на семью');
+    put('pA',224,96);put('pB',384,150);put('k1',396,302);put('k2',392,392);
+  }
+}
+
+/* авто-прокрутка сценария: обмер → решения → итог → повтор, пока пользователь не вмешался */
 let autoMode=true, planInView=false, looping=false;
-
-/* ручной клик по переключателю — пользователь берёт управление, авто-повтор выключается */
-pvBtns.forEach(b=>b.addEventListener('click',()=>{
-  autoMode=false; looping=false; famClear();
-  pvBtns.forEach(x=>x.classList.remove('active'));b.classList.add('active');
-  const v=b.dataset.view;
-  zoomOut();
-  stdLayer.style.display=v==='std'?'':'none';
-  famLayer.style.display=v==='family'?'':'none';
-  famBand.style.display=v==='std'?'none':'';
-  const fl=$id('finalLayer');
-  if(v==='final'){finalShow()}
-  else{fl.style.display='none';fl.style.opacity=0;fl.classList.remove('go')}
-  planCap.textContent=v==='family'?'рис. 02 — сценарный тест: утро семьи из двоих':v==='final'?'рис. 03 — итоговое планировочное решение':'рис. 01 — обмерный план БТИ · сталинка';
-  if(v==='family')famPlay();
-}));
-
-/* запуск сценария «для семьи», когда план прокручен в зону видимости; затем зацикливается */
-function startFamilyAuto(){
-  if(!autoMode)return;
-  looping=true;
-  pvBtns.forEach(x=>x.classList.remove('active'));
-  const fb=pvBtns.find(b=>b.dataset.view==='family');if(fb)fb.classList.add('active');
-  zoomOut();
-  stdLayer.style.display='none';
-  famLayer.style.display='';
-  famBand.style.display='';
-  const fl=$id('finalLayer');fl.style.display='none';fl.style.opacity=0;fl.classList.remove('go');
-  planCap.textContent='рис. 02 — сценарный тест: утро семьи из двоих';
-  famPlay();
+function autoRun(){
+  if(!autoMode){looping=false;return}
+  looping=true;clearFlow();goState(0);
+  const next=i=>{
+    if(!autoMode){looping=false;return}
+    goState(i);
+    if(i>=1&&i<=N)ft(STEPS[i-1].dur+900,()=>next(i+1));
+    else if(i===N+1)ft(5600,()=>{if(autoMode&&planInView)autoRun();else looping=false});
+  };
+  ft(2800,()=>next(1));
 }
-const planEl=document.querySelector('.hero-plan');
+buildScale();goState(0);
+const planEl=$id('planWidget');
 if(planEl&&'IntersectionObserver'in window){
   const planIO=new IntersectionObserver(es=>es.forEach(e=>{
     planInView=e.isIntersecting;
-    if(e.isIntersecting&&autoMode&&!looping)startFamilyAuto();
-  }),{threshold:.35});
+    if(e.isIntersecting&&autoMode&&!looping)autoRun();
+  }),{threshold:.3});
   planIO.observe(planEl);
-}else{startFamilyAuto();}
+}else{autoRun();}
 </script>
 </body>
 </html>
